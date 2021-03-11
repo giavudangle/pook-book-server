@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon app.js",
+    "dev": "nodemon --exec babel-node app.js"
+
   },
   "keywords": [],
   "author": "vudang",
@@ -27,5 +29,10 @@
     "sharp": "^0.25.4",
     "stripe": "^8.90.0",
     "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/node": "^7.13.10",
+    "@babel/preset-env": "^7.13.10"
   }
 }
