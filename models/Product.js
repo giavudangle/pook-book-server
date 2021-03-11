@@ -12,6 +12,9 @@ const productSchema = new Schema(
       type: String,
       required: true,
     },
+    title: {
+      type: String,     
+    },
     color: {
       type: String,
       required: true,

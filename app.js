@@ -31,7 +31,9 @@ const dbURI = process.env.DB_CONNECTION;
  * Router 
  */
 
-const productRoute = require("./routes/product");
+import PRODUCT_ROUTE from './routes/product'
+//const  = require('./routes/product')
+
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const favoriteRoute = require("./routes/favorite");
@@ -106,7 +108,7 @@ const Root = () => {
     res.end();
   });
 
-  // app.use(`/api/${process.env.VERSION}/product`, productRoute);
+  app.use(`/api/${process.env.VERSION}/product`, PRODUCT_ROUTE);
   // app.use(`/api/${process.env.VERSION}/cart`, cartRoute);
   // app.use(`/api/${process.env.VERSION}/order`, orderRoute);
   // app.use(`/api/${process.env.VERSION}/favoritelist`, favoriteRoute);
