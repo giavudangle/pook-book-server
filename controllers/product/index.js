@@ -1,9 +1,7 @@
+import { CLIENT_RESPONSE_CONSTANTS, SERVER_RESPONSE_CONSTANTS } from '../../constants';
 import Product from '../../models/Product';
 
-const SERVER_ERROR_STATUS = 'SERVER ERROR'
-const SERVER_ERROR_CONTENT = 'Something went wrong'
-const CLIENT_ERROR_STATUS = 'SERVER ERROR'
-const CLIENT_ERROR_CONTENT = 'Something went wrong in your intertract'
+
 
 /**
  * Get List Of Product In Database
@@ -29,7 +27,8 @@ const GetListProducts = (req, res) => {
             total: countResult,
             page: page,
             pageSize: data.length,
-            data: data
+            data: data,
+            status: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS
           })
         })
         .catch((countErr) => {
@@ -37,10 +36,10 @@ const GetListProducts = (req, res) => {
         })
     })
     .catch(err => {
-      return res.status(400).send({
-        status: SERVER_ERROR_STATUS,
+      return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
+        status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
         message: err.message,
-        data: SERVER_ERROR_CONTENT
+        data: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CONTENT
       })
     })
 
@@ -57,20 +56,20 @@ const CreateProduct = async (req, res) => {
   const port = process.env.PORT;
 
   const fileName = req.file.filename;
- 
-  if(!req.body || !req.file){
+
+  if (!req.body || !req.file) {
     return (
       res.status(400).send({
-        status: CLIENT_ERROR_STATUS,
-        message: "Please check your upload phrase",
-        content : CLIENT_ERROR_CONTENT
+        status: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
+        message: CLIENT_RESPONSE_CONSTANTS.CLIENT_UPLOAD_ERROR,
+        data: null
       })
     )
   }
 
-  
+
   const IMAGE_SIZE = '256x144-'
-  const imageUrl =`${host}:${port}/public/api/static/images/productPictures/${fileName}`
+  const imageUrl = `${host}:${port}/public/api/static/images/productPictures/${fileName}`
   const resizeUrl = `${host}:${port}/public/api/static/images/productPictures/${IMAGE_SIZE}${fileName}`
 
   const product = new Product({
@@ -83,19 +82,19 @@ const CreateProduct = async (req, res) => {
     url: imageUrl,
     thumb: resizeUrl,
     type: req.body.type,
-    title:req.body.title
+    title: req.body.title
   })
 
   try {
     const savedProduct = await product.save()
     return res.status(200).send({
-      status:"OK",
-      message: "Added Product Successfully",
+      status: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS,
+      message: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CONTENT,
       data: savedProduct,
     })
-  }catch(e) {
+  } catch (e) {
     return res.status(400).send({
-      status: SERVER_ERROR_STATUS,
+      status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
       message: e.message,
       data: null,
     });
@@ -104,10 +103,95 @@ const CreateProduct = async (req, res) => {
 
 }
 
+/**
+ * UPDATE A PRODUCT FROM SERVER
+ * @param req 
+ * @param res
+ */
+
+const UpdateProduct = async (req, res) => {
+  const id = req.query.id;
+  const host = process.env.HOST_NAME;
+  const port =process.env.PORT;
+
+  let filename = '';
+  let imageUrl = '';
+  let resizeUrl = '';
+  const IMAGE_SIZE = '256x144-'
+
+  if (!req.query.id || !req.body) {
+    return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
+      .send({
+        status: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
+        message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CONTENT,
+        content: null
+      })
+  }
+
+  if (req.file) {
+    filename = await req.file.filename
+    imageUrl = `${host}:${port}/public/api/static/images/productPictures/${filename}`
+    resizeUrl = `${host}:${port}/public/api/static/images/productPictures/${IMAGE_SIZE}${filename}`
+  }
+
+  const product = req.file
+    ? {
+      filename: req.file.filename,
+      price: req.body.price,
+      color: req.body.color,
+      origin: req.body.origin,
+      standard: req.body.standard,
+      description: req.body.description,
+      url: imageUrl,
+      thumb: resizeUrl,
+      type: req.body.type,
+      title: req.body.title
+      }
+    : req.body;
+  console.log(product);
+  try {
+    const newProduct = await Product.findByIdAndUpdate(id, product).exec()
+    return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send({
+      status: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS,
+      message: "Updated Product Successfully",
+      data: newProduct,
+    });
+  } catch {
+    return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
+      status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
+      message: err.message,
+      content: null,
+    });
+  }
+
+ 
+}
 
 
-
-export { 
+export {
   GetListProducts as GET_LIST_PRODUCTS,
-  CreateProduct as CREATE_PRODUCT
+  CreateProduct as CREATE_PRODUCT,
+  UpdateProduct as UPDATE_PRODUCT
 };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

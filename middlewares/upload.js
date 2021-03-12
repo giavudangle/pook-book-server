@@ -33,9 +33,6 @@ const fileFilter = (req, file, cb) => {
 };
 
 const resize = (req, res, next) => {
-  console.log('====================================');
-  console.log(req.file);
-  console.log('====================================');
   if (!req.file) return next();
   sharp(req.file.path)
     .resize(256, 144)
