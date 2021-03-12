@@ -54,10 +54,10 @@ const GetListProducts = (req, res) => {
 
 const CreateProduct = async (req, res) => {
   const host = process.env.HOST_NAME;
-  const fileName = req.body.filename.replace(/ + /g,"");
-  console.log('====================================');
-  console.log(req);
-  console.log('====================================');
+  const port = process.env.PORT;
+
+  const fileName = req.file.filename;
+ 
   if(!req.body || !req.file){
     return (
       res.status(400).send({
@@ -68,14 +68,13 @@ const CreateProduct = async (req, res) => {
     )
   }
 
-  const IMAGE_SIZE = '255x144-'
-  const imageUrl =`${host}/public/api/static/images
-  /productPictures/${fileName}.jpg`
-  const resizeUrl = `${host}/public/api/static/images
-  /productPictures/${IMAGE_SIZE}/${fileName}.jpg`
+  
+  const IMAGE_SIZE = '256x144-'
+  const imageUrl =`${host}:${port}/public/api/static/images/productPictures/${fileName}`
+  const resizeUrl = `${host}:${port}/public/api/static/images/productPictures/${IMAGE_SIZE}${fileName}`
 
   const product = new Product({
-    filename: req.body.filename,
+    filename: req.file.filename,
     price: req.body.price,
     color: req.body.color,
     origin: req.body.origin,
