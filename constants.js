@@ -18,6 +18,7 @@ export const CLIENT_RESPONSE_CONSTANTS = {
 
 
   // Utils Log
-  CLIENT_UPLOAD_ERROR : 'Please check your upload request'
+  CLIENT_UPLOAD_ERROR : 'Please check your upload request',
+  CLIENT_REMOVE_PRODUCT : 'Please provide your id need to remove'
 
 }

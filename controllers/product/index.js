@@ -110,7 +110,7 @@ const CreateProduct = async (req, res) => {
  */
 
 const UpdateProduct = async (req, res) => {
-  const id = req.query.id;
+  const id = req.params.id;
   const host = process.env.HOST_NAME;
   const port =process.env.PORT;
 
@@ -119,7 +119,7 @@ const UpdateProduct = async (req, res) => {
   let resizeUrl = '';
   const IMAGE_SIZE = '256x144-'
 
-  if (!req.query.id || !req.body) {
+  if (!req.params.id || !req.body) {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
       .send({
         status: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
@@ -148,7 +148,6 @@ const UpdateProduct = async (req, res) => {
       title: req.body.title
       }
     : req.body;
-  console.log(product);
   try {
     const newProduct = await Product.findByIdAndUpdate(id, product).exec()
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send({
@@ -163,15 +162,46 @@ const UpdateProduct = async (req, res) => {
       content: null,
     });
   }
+}
 
- 
+/**
+ * DELETE A PRODUCT FROM SERVER
+ * @param req 
+ * @param res
+ */
+
+const DeleteProduct = async (req,res) => {
+  const id = req.params.id;
+  if(!id){
+    return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
+      .send({
+        status:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
+        message:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CONTENT,
+        status:false
+      })
+  }
+  try {
+    await Product.findByIdAndDelete(id).exec();
+    return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE)
+      .send({
+        status:SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS,
+        messsage: "Delete Product Successfully",
+      })
+  } catch(ex) {
+    return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
+      status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
+      message: ex.message,
+      data: null,
+    });
+  }
 }
 
 
 export {
   GetListProducts as GET_LIST_PRODUCTS,
   CreateProduct as CREATE_PRODUCT,
-  UpdateProduct as UPDATE_PRODUCT
+  UpdateProduct as UPDATE_PRODUCT,
+  DeleteProduct as DELETE_PRODUCT
 };
 
 
