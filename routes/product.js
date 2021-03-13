@@ -12,10 +12,15 @@ ROUTER.post(
   PRODUCT_CONTROLLER.CREATE_PRODUCT);
 
 ROUTER.patch(
-  '/',
+  '/:id',
   upload.single('imageUrl'),
   resize,
   PRODUCT_CONTROLLER.UPDATE_PRODUCT);
+
+ROUTER.delete(
+  '/:id',
+  PRODUCT_CONTROLLER.DELETE_PRODUCT
+)
 
 
 export default ROUTER;
