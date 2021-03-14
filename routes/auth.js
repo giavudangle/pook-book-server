@@ -1,10 +1,12 @@
 import { Router } from "express";
 const router = Router();
-import { user_register, user_login, user_resetpw, user_receivepw, user_edit, user_photoUpload } from "../controllers/user";
+//import { user_register, user_login, user_resetpw, user_receivepw, user_edit, user_photoUpload } from "../controllers/user";
 import verifyToken from "../middlewares/verifytoken";
 import { single } from "../middlewares/uploadProfilePicture";
 
-// router.post("/register", user_register);
+import {USER_REGISTER} from '../controllers/user'
+
+router.post("/", USER_REGISTER);
 // router.post("/login", user_login);
 // router.patch("/:id", verifyToken, user_edit);
 // router.post("/reset_pw", user_resetpw);
