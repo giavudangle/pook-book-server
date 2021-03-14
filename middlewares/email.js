@@ -1,13 +1,31 @@
-import { createTransport } from "nodemailer";
+require('dotenv').config();
+import nodemailer from 'nodemailer'
 
-const transporter = createTransport({
-  host: "smtp.gmail.com",
-  secure: true,
-  auth: {
-    user: process.env.EMAIL_LOGIN,
-    pass: process.env.EMAIL_PASSWORD,
-  },
-});
+
+const transporter = nodemailer.createTransport({
+  host:"smtp.gmail.com",
+  secure:true,
+  port:465,
+  service:'gmail',
+  auth:{
+    user:process.env.EMAIL_LOGIN,
+    pass:process.env.EMAIL_PASSWORD
+  }
+})
+
+// transporter.verify((err,succ) => {
+//   if(err){
+//     console.log('====================================');
+//     console.log(err);
+//     console.log('====================================');
+//   } else {
+//     console.log('====================================');
+//     console.log(succ);
+//     console.log('====================================');
+//   }
+// })
+
+// verify connection configuration
 
 const getPasswordResetURL = (user, token) =>
   `http://192.168.0.27:8080/expo?userid=${user._id}&token=${token}`;
