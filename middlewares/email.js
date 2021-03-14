@@ -68,7 +68,7 @@ const sendUserOrderTemplate = (data, user) => {
 
   return { from, to, subject, html };
 };
-export default {
+export {
   transporter,
   getPasswordResetURL,
   resetPasswordTemplate,
