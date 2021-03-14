@@ -63,7 +63,7 @@ const Root = () => {
       );
       let dirPathUser = path.join(
         __dirname,
-        "public/api/static/images/userprofile"
+        "public/api/static/images/userPictures"
       );
       createDir(dirPath);
       createDir(dirPathUser);
