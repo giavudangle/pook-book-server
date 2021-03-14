@@ -4,10 +4,10 @@ const router = Router();
 import verifyToken from "../middlewares/verifytoken";
 import { single } from "../middlewares/uploadProfilePicture";
 
-import {USER_REGISTER} from '../controllers/user'
+import {USER_LOGIN, USER_REGISTER} from '../controllers/user'
 
-router.post("/", USER_REGISTER);
-// router.post("/login", user_login);
+router.post("/register", USER_REGISTER);
+router.post("/login", USER_LOGIN);
 // router.patch("/:id", verifyToken, user_edit);
 // router.post("/reset_pw", user_resetpw);
 // router.post("/receive_new_password/:userId/:token", user_receivepw);

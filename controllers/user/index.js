@@ -1,6 +1,6 @@
 import User from '../../models/User';
 
-import { SERVER_RESPONSE_CONSTANTS, CLIENT_RESPONSE_CONSTANTS } from '../../constants'
+import { SERVER_RESPONSE_CONSTANTS, CLIENT_RESPONSE_CONSTANTS, DATABASE_RESPONSE_CONSTANTS, AUTHENTICATION_RESPONSE_CONSTANTS } from '../../constants'
 
 import { registerValidation, loginValidation } from '../../middlewares/validation'
 
@@ -70,9 +70,120 @@ const UserRegister = async (req, res) => {
     message:"Register account successfully",
     data:userSaved
   })
-
 }
 
+
+const UserLogin = async (req,res) => {
+  const {error} = loginValidation(req.body);
+  const email = req.body.email.toLowerCase();
+  const { password } = req.body;
+  const pushTokens = req.body.pushTokens;
+
+  if (error) {
+    return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send(error.details[0].message);
+  }
+
+  
+
+  /**
+   * Role Activation
+   * 1. Admin
+   * 2. Client
+   */
+
+  // Admin Login
+  if (
+    email === process.env.DEFAULT_ADMINNAME &&
+    password === process.env.DEFAULT_PASSWORD
+  ) {
+    jwt.sign(
+      {name:'admin'},
+      process.env.SECRET_TOKEN,
+      {expiresIn:'3600s'},
+      (err,token) => {
+        if(err){
+          return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE)
+            .send({
+              status:SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
+              message:SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CONTENT
+            })
+        }
+        res.header('auth-token',token).send({
+          name:'admin',
+          token:token,
+          loginAt: Date.now(),
+          expireTime:Date.now() + 60 * 60 * 1000, // 5m
+        })
+      }
+    )
+  } 
+  // By the way -> client login
+  else {
+    const user = await User.findOne({email});
+    if(!user) {
+      return res.status(AUTHENTICATION_RESPONSE_CONSTANTS.AUTHENTICATION_FAILED_CODE)
+        .send({
+          status:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
+          message: AUTHENTICATION_RESPONSE_CONSTANTS.NO_USER_WITH_EMAIL
+        })
+    }
+    const passwordMatching = await bcrypt.compare(password,user.password);
+    if(!passwordMatching){
+      return res.status(AUTHENTICATION_RESPONSE_CONSTANTS.AUTHENTICATION_FAILED_CODE)
+        .send({
+          status:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
+          message: AUTHENTICATION_RESPONSE_CONSTANTS.PASSWORD_NOT_MATCHING
+        })
+    }
+
+    let checkingPushToken;
+    // Loop in array tokens of user and check isContain
+    if(pushTokens.length > 0) {
+      const checker = user.pushTokens.some((tokenIterator) => {
+        return tokenIterator === pushTokens[0];
+      })
+      checkingPushToken = checker;
+    }
+    if(checkingPushToken!== undefined || checkingPushToken!==null) {
+      user.pushTokens.push(pushTokens[0]);
+      await user.save();
+    }
+
+    // If user doesnt have token => we try to create it for their
+    try {
+      jwt.sign(
+        {userId:user._id},
+        process.env.SECRET_TOKEN,
+        {expiresIn:'3600s'},
+        (err,token) => {
+          if(err){
+            return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send(err)
+          }
+          return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send({
+            userid: user._id,
+            name: user.name,
+            password:password,
+            email: user.email,
+            phone: user.phone,
+            address: user.address,
+            profilePicture: user.profilePicture,
+            token: token,
+            loginAt: Date.now(),
+            expireTime: Date.now() + 60 * 60 * 1000,
+          })
+        }
+      )
+    } catch (e) {
+      res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE)
+      .send(e)
+    }
+  }
+}
+
+
+
+
 export {
-  UserRegister as USER_REGISTER
+  UserRegister as USER_REGISTER,
+  UserLogin as USER_LOGIN
 }
