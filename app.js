@@ -32,13 +32,13 @@ const dbURI = process.env.DB_CONNECTION;
  */
 
 import PRODUCT_ROUTE from './routes/product'
+import AUTH_ROUTE from './routes/auth'
 //const  = require('./routes/product')
 
 const cartRoute = require("./routes/cart");
 const orderRoute = require("./routes/order");
 const favoriteRoute = require("./routes/favorite");
-const authRoute = require("./routes/auth");
-const notification = require("./middlewares/notification");
+const notification = require("./middlewares/pushNotification");
 
 const Root = () => {
   const app = express();
@@ -63,7 +63,7 @@ const Root = () => {
       );
       let dirPathUser = path.join(
         __dirname,
-        "public/api/static/images/userprofile"
+        "public/api/static/images/userPictures"
       );
       createDir(dirPath);
       createDir(dirPathUser);
@@ -109,10 +109,11 @@ const Root = () => {
   });
 
   app.use(`/api/${process.env.VERSION}/product`, PRODUCT_ROUTE);
-  // app.use(`/api/${process.env.VERSION}/cart`, cartRoute);
+  app.use(`/api/${process.env.VERSION}/user`, AUTH_ROUTE);
+
+  //app.use(`/api/${process.env.VERSION}/cart`, cartRoute);
   // app.use(`/api/${process.env.VERSION}/order`, orderRoute);
   // app.use(`/api/${process.env.VERSION}/favoritelist`, favoriteRoute);
-  // app.use(`/api/${process.env.VERSION}/user`, authRoute);
   // app.use(`/api/notification`, notification);
 }
 

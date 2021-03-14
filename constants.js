@@ -1,6 +1,6 @@
 export const SERVER_RESPONSE_CONSTANTS = {
   SERVER_ERROR_STATUS : 'SERVER ERRORS',
-  SERVER_ERROR_CONTENT : 'Something went wrong from server',
+  SERVER_ERROR_CONTENT : 'Something went wrong ',
   SERVER_ERROR_CODE : 500,
 
   SERVER_SUCCESS_STATUS : 'SUCCESS',
