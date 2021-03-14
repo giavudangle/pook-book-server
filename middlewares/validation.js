@@ -9,13 +9,14 @@ const RegisterSchema = Joi.object({
         .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
     email: Joi.string()
         .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
+        .lowercase()
 })
 
 const LoginSchema = Joi.object({
   password: Joi.string()
       .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
   email: Joi.string()
-      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
+      .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net','vn'] } }),
   pushTokens:Joi.array()
 })
     

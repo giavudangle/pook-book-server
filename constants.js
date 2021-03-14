@@ -22,3 +22,11 @@ export const CLIENT_RESPONSE_CONSTANTS = {
   CLIENT_REMOVE_PRODUCT : 'Please provide your id need to remove'
 
 }
+
+
+export const AUTHENTICATION_RESPONSE_CONSTANTS = {
+  AUTHENTICATION_FAILED_CODE:404,
+  NO_USER_WITH_EMAIL : 'User doesnt exist in our database',
+  PASSWORD_NOT_MATCHING :'Wrong password',
+
+}
