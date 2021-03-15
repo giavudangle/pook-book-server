@@ -28,5 +28,6 @@ export const AUTHENTICATION_RESPONSE_CONSTANTS = {
   AUTHENTICATION_FAILED_CODE:404,
   NO_USER_WITH_EMAIL : 'User doesnt exist in our database',
   PASSWORD_NOT_MATCHING :'Wrong password',
+  USER_INVALID : 'User Invalid'
 
 }
