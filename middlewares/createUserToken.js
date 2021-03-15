@@ -4,7 +4,7 @@ const usePasswordHashToMakeToken = (user) => {
   const { password, _id, createdAt } = user;
   const secret = password + "-" + createdAt;
   const token = sign({ _id }, secret, {
-    expiresIn: 15 * 60 * 1000, // 15 mins
+    expiresIn: '7d'
   });
   // highlight-end
   return token;

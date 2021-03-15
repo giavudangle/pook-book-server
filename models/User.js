@@ -31,8 +31,8 @@ const registerSchema = new Schema({
   pushTokens: {
     type: Array,
     required: true,
-  },
-});
+  }
+},{timestamps:true});
 
 const Register = model('user', registerSchema);
 export default Register;

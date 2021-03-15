@@ -1,6 +1,6 @@
 import User from '../../models/User';
 
-import { SERVER_RESPONSE_CONSTANTS, CLIENT_RESPONSE_CONSTANTS, DATABASE_RESPONSE_CONSTANTS, AUTHENTICATION_RESPONSE_CONSTANTS } from '../../constants'
+import { SERVER_RESPONSE_CONSTANTS, CLIENT_RESPONSE_CONSTANTS, AUTHENTICATION_RESPONSE_CONSTANTS } from '../../constants'
 
 import { registerValidation, loginValidation } from '../../middlewares/validation'
 
@@ -218,10 +218,89 @@ const UserUploadProfilePhoto = (req, res) => {
   }
 }
 
+const UserResetPassword = async (req,res) => {
+  const email = req.body.email.toLowerCase();
+  if (!email) {
+    return res.status(400).send({ err: 'Email is wrong' });
+  }
+  let user;
+  try {
+    user = await User.findOne({ email });
+  } catch (err) {
+    res.status(404).send({ err: 'Email is not exist' });
+  }
+  console.log('====================================');
+  console.log(user);
+  console.log('====================================');
+  const token = usePasswordHashToMakeToken(user);
+  const url = getPasswordResetURL(user, token);
+  const emailTemplate = resetPasswordTemplate(user, url);
+  const sendEmail = () => {
+    transporter.sendMail(emailTemplate, (err, info) => {
+      if (err) {
+        res.status(500).send({ err: 'Error sending email' });
+      } else {
+        console.log(`** Email sent **`, info);
+        res.send({ res: 'Sent reset Email' });
+      }
+    });
+  };
+
+  sendEmail();
+}
+
+
+const UserReceiveNewPassword = async (req,res) => {
+  const { userId, token } = req.params;
+  const { password } = req.body;
+  
+  console.log('====================================');
+  console.log(req);
+  console.log('====================================');
+
+  let content = {
+    title: 'Security',
+    body: `Reset Password Successfully.`,
+  };
+  // highlight-start
+  const id = userId;
+  const user = await User.findById(id).exec()
+  if (!user) {
+    res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE)
+      .send(AUTHENTICATION_RESPONSE_CONSTANTS.USER_INVALID);
+  }
+  const secret = user.password + '-' + user.createdAt;
+
+
+  const payload = jwt.decode(token, secret);
+  if (payload._id === userId) {
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+    try {
+      const updateUser = await User.findOneAndUpdate(
+        { _id: userId },
+        { password: hashedPassword },
+        {$set:{"pushTokens":token}}
+      );
+      console.log('====================================');
+      console.log(updateUser);
+      console.log('====================================');
+        pushNotification(updateUser.pushTokens, content, ''),
+        res.status(202).send('Password is changed');
+    } catch (err) {
+      res.status(500).send({ err });
+    }
+  } else {
+    res.status(500).send({ err: 'Token is invalid' });
+  }
+}
+
 
 export {
   UserRegister as USER_REGISTER,
   UserLogin as USER_LOGIN,
   UserEdit as USER_EDIT,
-  UserUploadProfilePhoto as USER_UPLOAD_PHOTO
+  UserUploadProfilePhoto as USER_UPLOAD_PHOTO,
+  UserResetPassword as USER_RESET_PASSWORD,
+  UserReceiveNewPassword as USER_RECEIVE_NEW_PASSWORD
 }
