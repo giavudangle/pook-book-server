@@ -85,7 +85,7 @@ const sendUserOrderTemplate = (data, user) => {
   <p>Thanks for choosing our store </p>
   <p>Warm hugs,</p>
   <p>Your friend CodingwithVudang 🚀</p>
-  <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.0-9/151284066_207254161142817_5812038792384707893_n.png?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=pRGC33VnrYgAX8pPhJm&_nc_ht=scontent.fsgn2-1.fna&oh=df9a2f46200a1047c3ef4cfb402f245e&oe=6071E763" alt="logo" width="500" height="60" > 
+  <img src="https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.0-9/151284066_207254161142817_5812038792384707893_n.png?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=pRGC33VnrYgAX8pPhJm&_nc_ht=scontent.fsgn2-1.fna&oh=df9a2f46200a1047c3ef4cfb402f245e&oe=6071E763" alt="logo" width="500" height="500" > 
   `;
 
   return { from, to, subject, html };
