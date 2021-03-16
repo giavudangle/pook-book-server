@@ -32,6 +32,9 @@ const getPasswordResetURL = (user, token) =>
   `http://${host}:8080/expo?userid=${user._id}&token=${token}`;
 
 const resetPasswordTemplate = (user, url) => {
+  console.log('================URL EMAIL====================');
+  console.log(url);
+  console.log('====================================');
   const from = process.env.EMAIL_LOGIN;
   const to = user.email;
   const subject = "🚀 CodingwithVudang Password Reset 🚀";

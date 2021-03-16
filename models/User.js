@@ -29,6 +29,7 @@ const registerSchema = new Schema({
     type: String,
   },
   pushTokens: {
+    // push tokens is array of EXPO PUSH NOTIFICATION TOKENS
     type: Array,
     required: true,
   }

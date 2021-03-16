@@ -162,7 +162,7 @@ const UserLogin = async (req, res) => {
           return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send({
             userid: user._id,
             name: user.name,
-            password: password,
+            password: user.password,
             email: user.email,
             phone: user.phone,
             address: user.address,
