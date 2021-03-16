@@ -33,6 +33,8 @@ const dbURI = process.env.DB_CONNECTION;
 
 import PRODUCT_ROUTE from './routes/product'
 import AUTH_ROUTE from './routes/auth'
+import PUSH_NOTIFICATION from './middlewares/pushNotification'
+
 //const  = require('./routes/product')
 
 const cartRoute = require("./routes/cart");
@@ -110,11 +112,11 @@ const Root = () => {
 
   app.use(`/api/${process.env.VERSION}/product`, PRODUCT_ROUTE);
   app.use(`/api/${process.env.VERSION}/user`, AUTH_ROUTE);
+  app.use(`/api/notification`, PUSH_NOTIFICATION);
+  // app.use(`/api/${process.env.VERSION}/order`, orderRoute);
 
   //app.use(`/api/${process.env.VERSION}/cart`, cartRoute);
-  // app.use(`/api/${process.env.VERSION}/order`, orderRoute);
   // app.use(`/api/${process.env.VERSION}/favoritelist`, favoriteRoute);
-  // app.use(`/api/notification`, notification);
 }
 
 
