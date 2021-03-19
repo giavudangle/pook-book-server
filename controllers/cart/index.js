@@ -33,7 +33,7 @@ const CreateCart = (req, res) => {
       return res.status(404).send({
         status: "ERR_SERVER",
         message: err.message,
-        content: null,
+        data: null,
       });
     }
     if (result) {
@@ -49,7 +49,7 @@ const CreateCart = (req, res) => {
             return res.status(200).send({
               status: "OK",
               message: "Added Cart Successfully",
-              content: data,
+              data: data,
             });
           })
           .catch((err) => console.log(err));
@@ -66,7 +66,7 @@ const CreateCart = (req, res) => {
             return res.status(200).send({
               status: "OK",
               message: "Added Cart Successfully",
-              content: data,
+              data: data,
             });
           })
           .catch((err) => console.log(err));
@@ -82,7 +82,7 @@ const CreateCart = (req, res) => {
           return res.status(200).send({
             status: "OK",
             message: "Added Cart Successfully",
-            content: data,
+            data: data,
           });
         })
         .catch((err) => console.log(err));
@@ -91,7 +91,7 @@ const CreateCart = (req, res) => {
     return res.status(400).send({
       status: "ERR_SERVER",
       message: err.message,
-      content: null,
+      data: null,
     });
   });
 };
@@ -103,7 +103,7 @@ const UpdateCart = (req, res) => {
     return res.status(200).send({
       status: "ERR_REQUEST",
       message: "Please check your request",
-      content: null,
+      data: null,
     });
   }
   Cart.findById(id, (err, result) => {
@@ -132,14 +132,14 @@ const UpdateCart = (req, res) => {
       return res.status(200).send({
         status: "OK",
         message: "Updated Cart Successfully",
-        content: data,
+        data: data,
       });
     })
     .catch((err) => {
       return res.status(400).send({
         status: "ERR_SERVER",
         message: err.message,
-        content: null,
+        data: null,
       });
     });
 }
@@ -152,7 +152,7 @@ const DeleteCartItem = (req, res) => {
     return res.status(200).send({
       status: "ERR_REQUEST",
       message: "Please check your ID request",
-      content: null,
+      data: null,
     });
   }
   Cart.findById(id, (err, result) => {
@@ -169,14 +169,14 @@ const DeleteCartItem = (req, res) => {
       return res.status(200).send({
         status: "OK",
         message: "Delete Cart Item Successfully",
-        content: data,
+        data: data,
       });
     })
     .catch((err) => {
       return res.status(400).send({
         status: "ERR_SERVER",
         message: err.message,
-        content: null,
+        data: null,
       });
     });
 };
@@ -189,14 +189,14 @@ const DeleteCart = (req, res) => {
       return res.status(200).send({
         status: "OK",
         message: "Delete Cart Successfully",
-        content: data,
+        data: data,
       });
     })
     .catch((err) => {
       return res.status(400).send({
         status: "ERR_SERVER",
         message: err.message,
-        content: null,
+        data: null,
       });
     });
 };

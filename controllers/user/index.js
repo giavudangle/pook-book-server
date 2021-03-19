@@ -26,7 +26,7 @@ const UserRegister = async (req, res) => {
   if (error) {
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE)
       .send({
-        error: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CONTENT,
+        error: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
         message: error.details[0].message,
       })
   }
@@ -37,7 +37,7 @@ const UserRegister = async (req, res) => {
   if (emailHasExist) {
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE)
       .send({
-        error: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CONTENT,
+        error: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_data,
         message: 'Your email are already exists'
       })
   }
@@ -105,7 +105,7 @@ const UserLogin = async (req, res) => {
           return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE)
             .send({
               status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
-              message: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CONTENT
+              message: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_data
             })
         }
         res.header('auth-token', token).send({
@@ -201,8 +201,8 @@ const UserUploadProfilePhoto = (req, res) => {
   if (!req.body || !req.file) {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE).send({
       status: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
-      message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CONTENT,
-      content: 'PLEASE GIVE ME AN IMAGE',
+      message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
+      data: 'PLEASE GIVE ME AN IMAGE',
     });
   } else {    
     const imageUrl = `${host}:${port}/public/api/static/images/userPictures/profile-${id}.jpg`
@@ -258,7 +258,7 @@ const UserReceiveNewPassword = async (req,res) => {
   console.log(req);
   console.log('====================================');
 
-  let content = {
+  let data = {
     title: 'Security',
     body: `Reset Password Successfully.`,
   };
@@ -285,7 +285,7 @@ const UserReceiveNewPassword = async (req,res) => {
       console.log('====================================');
       console.log(updateUser);
       console.log('====================================');
-        pushNotification(updateUser.pushTokens, content, ''),
+        pushNotification(updateUser.pushTokens, data, ''),
         res.status(202).send('Password is changed');
     } catch (err) {
       res.status(500).send({ err });

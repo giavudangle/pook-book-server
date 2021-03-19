@@ -35,15 +35,8 @@ import PRODUCT_ROUTE from './routes/product'
 import AUTH_ROUTE from './routes/auth'
 import ORDER_ROUTE from './routes/order'
 import CART_ROUTE from './routes/cart'
-
+import FAVORITE_ROUTE from './routes/favorite'
 import PUSH_NOTIFICATION from './middlewares/pushNotification'
-
-//const  = require('./routes/product')
-
-const cartRoute = require("./routes/cart");
-const orderRoute = require("./routes/order");
-const favoriteRoute = require("./routes/favorite");
-const notification = require("./middlewares/pushNotification");
 
 const Root = () => {
   const app = express();
@@ -118,8 +111,8 @@ const Root = () => {
   app.use(`/api/notification`, PUSH_NOTIFICATION);
   app.use(`/api/${process.env.VERSION}/order`, ORDER_ROUTE);
   app.use(`/api/${process.env.VERSION}/cart`, CART_ROUTE);
-  // app.use(`/api/${process.env.VERSION}/favoritelist`, favoriteRoute);
-}
+  app.use(`/api/${process.env.VERSION}/favorite`, FAVORITE_ROUTE);
+} 
 
 
 /**
