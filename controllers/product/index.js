@@ -1,6 +1,7 @@
 import { CLIENT_RESPONSE_CONSTANTS, SERVER_RESPONSE_CONSTANTS } from '../../constants';
 import Product from '../../models/Product';
-
+import fs from 'fs'
+import cloudinary from '../../middlewares/cloudinary'
 
 
 /**
@@ -47,16 +48,12 @@ const GetListProducts = (req, res) => {
 
 /**
  * POST A PRODUCT TO SERVER
- * @param req 
- * @param res
+ * @req data sent from client
+ * @res product has been created
  */
 
 const CreateProduct = async (req, res) => {
-  const host = process.env.HOST_NAME;
-  const port = process.env.PORT;
-
   const fileName = req.file.filename;
-
   if (!req.body || !req.file) {
     return (
       res.status(400).send({
@@ -66,11 +63,17 @@ const CreateProduct = async (req, res) => {
       })
     )
   }
+  // :))))) Tech Debt :v We can optimize this later :)))
+  const originalImagePath =
+  `public/api/static/images/productPictures/${fileName}` 
+  const croppedImagePath = 
+  `public/api/static/images/productPictures/256x144-${fileName}`
 
+  const cloudinaryResultRaw = await cloudinary.uploader.upload(originalImagePath)
+  const cloudinaryResultCropped = await cloudinary.uploader.upload(croppedImagePath)
 
-  const IMAGE_SIZE = '256x144-'
-  const imageUrl = `${host}:${port}/public/api/static/images/productPictures/${fileName}`
-  const resizeUrl = `${host}:${port}/public/api/static/images/productPictures/${IMAGE_SIZE}${fileName}`
+  fs.unlinkSync(originalImagePath)
+  fs.unlinkSync(croppedImagePath)
 
   const product = new Product({
     filename: req.file.filename,
@@ -79,8 +82,8 @@ const CreateProduct = async (req, res) => {
     origin: req.body.origin,
     standard: req.body.standard,
     description: req.body.description,
-    url: imageUrl,
-    thumb: resizeUrl,
+    url: cloudinaryResultRaw.secure_url,
+    thumb: cloudinaryResultCropped.secure_url,
     type: req.body.type,
     title: req.body.title
   })

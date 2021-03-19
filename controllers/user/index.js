@@ -1,5 +1,5 @@
 import User from '../../models/User';
-
+import fs from 'fs'
 import { SERVER_RESPONSE_CONSTANTS, CLIENT_RESPONSE_CONSTANTS, AUTHENTICATION_RESPONSE_CONSTANTS } from '../../constants'
 
 import { registerValidation, loginValidation } from '../../middlewares/validation'
@@ -14,6 +14,10 @@ import { transporter, getPasswordResetURL, resetPasswordTemplate, registerUserTe
 import usePasswordHashToMakeToken from '../../middlewares/createUserToken'
 
 import pushNotification from '../../middlewares/pushNotification';
+
+
+import cloudinary from '../../middlewares/cloudinary'
+
 
 const UserRegister = async (req, res) => {
   /**
@@ -181,7 +185,7 @@ const UserLogin = async (req, res) => {
 }
 
 
-const UserEdit = (req, res) => {
+const UserEdit = async (req, res) => {
   const { id } = req.params;
   User.findOneAndUpdate({ _id: id }, req.body)
     .then((result) => {
@@ -192,11 +196,12 @@ const UserEdit = (req, res) => {
     });
 };
 
-const UserUploadProfilePhoto = (req, res) => {
-  const host = process.env.HOST_NAME;
-  const port = process.env.PORT;
+const UserUploadProfilePhoto = async (req, res) => {
   const { id } = req.params;
 
+  console.log('====================================');
+  console.log(req.file);
+  console.log('====================================');
 
   if (!req.body || !req.file) {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE).send({
@@ -205,9 +210,11 @@ const UserUploadProfilePhoto = (req, res) => {
       data: 'PLEASE GIVE ME AN IMAGE',
     });
   } else {    
-    const imageUrl = `${host}:${port}/public/api/static/images/userPictures/profile-${id}.jpg`
+    const {secure_url} = await cloudinary.uploader.upload(req.file.path);
+    fs.unlinkSync(req.file.path)
 
-    User.findOneAndUpdate({ _id: id }, { profilePicture: imageUrl })
+
+    User.findOneAndUpdate({ _id: id }, { profilePicture: secure_url })
       .then((result) => {
         return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE)
           .send('Upload profile picture successfully');
