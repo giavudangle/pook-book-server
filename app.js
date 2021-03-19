@@ -24,7 +24,6 @@ import fs from 'fs'
  */
 const networkInterfaces = os.networkInterfaces();
 const ip = networkInterfaces.lo0[0].address
-const dbURI = process.env.DB_CONNECTION;
 
 
 /**
@@ -38,85 +37,83 @@ import CART_ROUTE from './routes/cart'
 import FAVORITE_ROUTE from './routes/favorite'
 import PUSH_NOTIFICATION from './middlewares/pushNotification'
 
-const Root = () => {
-  const app = express();
-  //Connect to DB
-  mongoose.connect(
-    dbURI,
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-      useFindAndModify: false,
-      useCreateIndex: true,
-    },
-    () => {
-      app.listen(process.env.PORT, ip,() => {
-          console.log('====================================');
-          console.log(`Sever connected at ${ip}/${process.env.PORT}`);
-          console.log('===================================='); 
-      })
-      let dirPath = path.join(
-        __dirname,
-        "public/api/static/images/productPictures"
-      );
-      let dirPathUser = path.join(
-        __dirname,
-        "public/api/static/images/userPictures"
-      );
-      createDir(dirPath);
-      createDir(dirPathUser);
+
+//const dbURI = process.env.DB_C0NNECTION_PRODUCTION;
+const dbURI = 'mongodb+srv://codingwithvudang:codingwithvudang@cluster0.w9pom.mongodb.net/book-db?retryWrites=true&w=majority'
+
+const app = express();
+//Connect to DB
+mongoose.connect(
+  dbURI,
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useFindAndModify: true,
+    useCreateIndex: true,
+  },
+  () => {
+    app.listen(process.env.PORT, ip, () => {
       console.log('====================================');
-      console.log(`Database connected successfully ^^`);
+      console.log(`Sever connected at ${ip}:${process.env.PORT}`);
       console.log('====================================');
-    }
-  );
-  
-  function createDir(dirPath) {
-    if (!fs.existsSync(dirPath)) {
-      fs.mkdirSync(dirPath, { recursive: true }, (err) => {
-        if (err) {
-          console.error("createDir Error:", err);
-        } else {
-          console.log("Directory is made!");
-        }
-      });
-    }
+    })
+    let dirPath = path.join(
+      __dirname,
+      "public/api/static/images/productPictures"
+    );
+    let dirPathUser = path.join(
+      __dirname,
+      "public/api/static/images/userPictures"
+    );
+    createDir(dirPath);
+    createDir(dirPathUser);
+    console.log('====================================');
+    console.log(`Database connected successfully ^^`);
+    console.log('====================================');
   }
-  
-  /**
-   * Use our middleware
-   */
-  app.use(morgan("dev"));
-  app.use("/public", express.static(path.join(__dirname, "public")));
-  app.use(cors());
-  app.use(express.json());
-  app.use(bodyParser.json({ limit: "10mb" }));
-  app.use(bodyParser.urlencoded({ extended: false, limit: "10mb" }));
-  
-  /**
-   * Router
-   */
-  app.get("/expo", (req, res) => {
-    const id = req.query.userid;
-    const token = req.query.token;
-    console.log(id, token);
-    res.writeHead(301, {
-      Location: `exp://${ip}:19000/--/ResetPw?userid=${id}&token=${token}`,
+);
+
+function createDir(dirPath) {
+  if (!fs.existsSync(dirPath)) {
+    fs.mkdirSync(dirPath, { recursive: true }, (err) => {
+      if (err) {
+        console.error("createDir Error:", err);
+      } else {
+        console.log("Directory is made!");
+      }
     });
-    res.end();
-  });
-
-  app.use(`/api/${process.env.VERSION}/product`, PRODUCT_ROUTE);
-  app.use(`/api/${process.env.VERSION}/user`, AUTH_ROUTE);
-  app.use(`/api/notification`, PUSH_NOTIFICATION);
-  app.use(`/api/${process.env.VERSION}/order`, ORDER_ROUTE);
-  app.use(`/api/${process.env.VERSION}/cart`, CART_ROUTE);
-  app.use(`/api/${process.env.VERSION}/favorite`, FAVORITE_ROUTE);
-} 
-
+  }
+}
 
 /**
- * RUN ROOT ANT CATCH EX
+ * Use our middleware
  */
+app.use(morgan("dev"));
+app.use("/public", express.static(path.join(__dirname, "public")));
+app.use(cors());
+app.use(express.json());
+app.use(bodyParser.json({ limit: "10mb" }));
+app.use(bodyParser.urlencoded({ extended: false, limit: "10mb" }));
 
-Root()
+/**
+ * Router
+ */
+app.get("/expo", (req, res) => {
+  const id = req.query.userid;
+  const token = req.query.token;
+  console.log(id, token);
+  res.writeHead(301, {
+    Location: `exp://${ip}:19000/--/ResetPw?userid=${id}&token=${token}`,
+  });
+  res.end();
+});
+
+app.use(`/api/${process.env.VERSION}/product`, PRODUCT_ROUTE);
+app.use(`/api/${process.env.VERSION}/user`, AUTH_ROUTE);
+app.use(`/api/notification`, PUSH_NOTIFICATION);
+app.use(`/api/${process.env.VERSION}/order`, ORDER_ROUTE);
+app.use(`/api/${process.env.VERSION}/cart`, CART_ROUTE);
+app.use(`/api/${process.env.VERSION}/favorite`, FAVORITE_ROUTE);
+
+
+
