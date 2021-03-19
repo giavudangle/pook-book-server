@@ -39,7 +39,7 @@ const GetListProducts = (req, res) => {
       return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
         status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
         message: err.message,
-        data: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CONTENT
+        data: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_data
       })
     })
 
@@ -89,7 +89,7 @@ const CreateProduct = async (req, res) => {
     const savedProduct = await product.save()
     return res.status(200).send({
       status: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS,
-      message: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CONTENT,
+      message: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_data,
       data: savedProduct,
     })
   } catch (e) {
@@ -123,8 +123,8 @@ const UpdateProduct = async (req, res) => {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
       .send({
         status: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
-        message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CONTENT,
-        content: null
+        message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
+        data: null
       })
   }
 
@@ -159,7 +159,7 @@ const UpdateProduct = async (req, res) => {
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
       status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
       message: err.message,
-      content: null,
+      data: null,
     });
   }
 }
@@ -176,7 +176,7 @@ const DeleteProduct = async (req,res) => {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
       .send({
         status:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
-        message:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CONTENT,
+        message:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
         status:false
       })
   }

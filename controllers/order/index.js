@@ -43,10 +43,10 @@ const CreateOrder = async (req, res) => {
     return res.status(200).send({
       status: "ERR_REQUEST",
       message: "Please check your request!",
-      content: null,
+      data: null,
     });
   }
-  let content = {
+  let data = {
     title: "Cập nhật đơn hàng",
     body: `Đơn hàng của bạn đã được đặt thành công.`,
   };
@@ -72,7 +72,7 @@ const CreateOrder = async (req, res) => {
     console.log(resOrder);
     console.log('====================================');
     const user = await User.findById(resOrder.userId);
-    pushNotification(user.pushTokens, content, "");
+    pushNotification(user.pushTokens, data, "");
     transporter.sendMail(sendUserOrderTemplate(resOrder, user), (err, info) => {
       if (err) {
         res.status(500).send({ err: "Error sending email" });
@@ -83,13 +83,13 @@ const CreateOrder = async (req, res) => {
     res.status(200).send({
       status: "OK",
       message: "Added Order Successfully",
-      content: resOrder,
+      data: resOrder,
     });
   } catch (err) {
     return res.status(400).send({
       status: "ERR_SERVER",
       message: err.message,
-      content: null,
+      data: null,
     });
   }
 };
@@ -104,10 +104,10 @@ const UpdateOrder = async (req, res) => {
     return res.status(200).send({
       status: "ERR_REQUEST",
       message: "Please check your ID request",
-      content: null,
+      data: null,
     });
   }
-  let content = {
+  let data = {
     title: "Cập nhật đơn hàng",
     body: `Đơn hàng ${id.substr(id.length - 10)} đã được ${updateStatus}.`,
   };
@@ -116,17 +116,17 @@ const UpdateOrder = async (req, res) => {
       status: updateStatus,
     });
     const user = User.findById(resOrder.userId);
-    pushNotification(user.pushTokens, content, "");
+    pushNotification(user.pushTokens, data, "");
     return res.status(200).send({
       status: "OK",
       message: "Updated Order Successfully",
-      content: resOrder,
+      data: resOrder,
     });
   } catch (err) {
     return res.status(400).send({
       status: "ERR_SERVER",
       message: err.message,
-      content: null,
+      data: null,
     });
   }
 };
