@@ -103,7 +103,7 @@ const UserLogin = async (req, res) => {
     jwt.sign(
       { name: 'admin' },
       process.env.SECRET_TOKEN,
-      { expiresIn: '3600s' },
+      { expiresIn: '7d' },
       (err, token) => {
         if (err) {
           return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE)
@@ -116,7 +116,7 @@ const UserLogin = async (req, res) => {
           name: 'admin',
           token: token,
           loginAt: Date.now(),
-          expireTime: Date.now() + 60 * 60 * 1000, // 5m
+          expireTime: Date.now() + 86400000 * 7 // 7d
         })
       }
     )
@@ -158,7 +158,7 @@ const UserLogin = async (req, res) => {
       jwt.sign(
         { userId: user._id },
         process.env.SECRET_TOKEN,
-        { expiresIn: '3600s' },
+        { expiresIn: '7d' },
         (err, token) => {
           if (err) {
             return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send(err)
@@ -173,7 +173,7 @@ const UserLogin = async (req, res) => {
             profilePicture: user.profilePicture,
             token: token,
             loginAt: Date.now(),
-            expireTime: Date.now() + 60 * 60 * 1000,
+            expireTime: Date.now() + 86400000 * 7 // 7 days
           })
         }
       )
@@ -209,8 +209,8 @@ const UserUploadProfilePhoto = async (req, res) => {
       message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
       data: 'PLEASE GIVE ME AN IMAGE',
     });
-  } else {    
-    const {secure_url} = await cloudinary.uploader.upload(req.file.path);
+  } else {
+    const { secure_url } = await cloudinary.uploader.upload(req.file.path);
     fs.unlinkSync(req.file.path)
 
 
@@ -225,7 +225,7 @@ const UserUploadProfilePhoto = async (req, res) => {
   }
 }
 
-const UserResetPassword = async (req,res) => {
+const UserResetPassword = async (req, res) => {
   const email = req.body.email.toLowerCase();
   if (!email) {
     return res.status(400).send({ err: 'Email is wrong' });
@@ -257,10 +257,10 @@ const UserResetPassword = async (req,res) => {
 }
 
 
-const UserReceiveNewPassword = async (req,res) => {
+const UserReceiveNewPassword = async (req, res) => {
   const { userId, token } = req.params;
   const { password } = req.body;
-  
+
   console.log('====================================');
   console.log(req);
   console.log('====================================');
@@ -287,12 +287,12 @@ const UserReceiveNewPassword = async (req,res) => {
       const updateUser = await User.findOneAndUpdate(
         { _id: userId },
         { password: hashedPassword },
-        {$set:{"pushTokens":token}}
+        { $set: { "pushTokens": token } }
       );
       console.log('====================================');
       console.log(updateUser);
       console.log('====================================');
-        pushNotification(updateUser.pushTokens, data, ''),
+      pushNotification(updateUser.pushTokens, data, ''),
         res.status(202).send('Password is changed');
     } catch (err) {
       res.status(500).send({ err });

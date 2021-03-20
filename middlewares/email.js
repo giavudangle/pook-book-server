@@ -32,9 +32,6 @@ const getPasswordResetURL = (user, token) =>
   `http://${host}:8080/expo?userid=${user._id}&token=${token}`;
 
 const resetPasswordTemplate = (user, url) => {
-  console.log('================URL EMAIL====================');
-  console.log(url);
-  console.log('====================================');
   const from = process.env.EMAIL_LOGIN;
   const to = user.email;
   const subject = "🚀 CodingwithVudang Password Reset 🚀";
@@ -56,7 +53,7 @@ const resetPasswordTemplate = (user, url) => {
 const registerUserTemplate = (user) => {
   const from = process.env.EMAIL_LOGIN;
   const to = user.email;
-  const subject = "🚀 Đăng Ký Tài Khoản Thành Công 🚀";
+  const subject = "🚀 Register Account Successfully 🚀";
   const html = `
   <p>Dear, ${user.name} </p>
   <p>Thank you for registering for shopping at our store </p>
@@ -73,7 +70,7 @@ const registerUserTemplate = (user) => {
 const sendUserOrderTemplate = (data, user) => {
   const from = process.env.EMAIL_LOGIN;
   const to = user.email;
-  const subject = "🚀 Đặt hàng thành công, thông tin đơn hàng của bạn 🚀";
+  const subject = "🚀 Order Successfully, Your Order Information Below 🚀";
   const html = `
   
   <p>Dear, Customer </p>
