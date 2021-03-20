@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "babel-node app.js",
     "dev": "nodemon --exec babel-node app.js"
   },
   "keywords": [],
@@ -27,12 +27,12 @@
     "path": "^0.12.7",
     "sharp": "^0.25.4",
     "stripe": "^8.90.0",
-    "uuid": "^8.3.0"
-  },
-  "devDependencies": {
+    "uuid": "^8.3.0",
     "@babel/core": "^7.13.10",
     "@babel/node": "^7.13.10",
-    "@babel/preset-env": "^7.13.10",
+    "@babel/preset-env": "^7.13.10"
+  },
+  "devDependencies": {
     "morgan": "^1.10.0"
   }
 }
