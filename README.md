@@ -18,7 +18,21 @@
 ## 🚀 Deploy
 
 API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com
-- PRODUCT END POINT :
+- PRODUCT ENDPOINT :  http://codingwithvudang-bookserver.herokuapp.com/api/v1/product
+  - GET : api/v1/product?page=0&limit=10
+    - Page & Limit are Query Params 
+  - POST : form data
+    - imageUrl : image file
+    - title : string
+    - price : decimal
+    - origin : string
+    - type : string
+    - description : string 
+    - color : string
+    - standard : string
+  - PATCH : edit product ( put these field in form data )
+  - DELETE : delete product with given id ( params id  :id )
+    
 
 ## 🚀 Get Started
 
