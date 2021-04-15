@@ -1,10 +1,5 @@
 
-Deployed on :
-http://codingwithvudang-bookserver.herokuapp.com
 
-Example Request : http://codingwithvudang-bookserver.herokuapp.com/api/v1/product
-
-<img align='right' src="https://media.giphy.com/media/M9gbBd9nbDrOTu1Mqx/giphy.gif" width="230">
  
 ## 🚀 PookBook Server 
 
@@ -19,6 +14,11 @@ Example Request : http://codingwithvudang-bookserver.herokuapp.com/api/v1/produc
 
 ## 🚀 Contributors
 - Vudang
+
+## 🚀 Deploy
+
+API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com
+- PRODUCT END POINT :
 
 ## 🚀 Get Started
 
