@@ -15,24 +15,53 @@
 ## 🚀 Contributors
 - Vudang
 
-## 🚀 Deploy
+## 🚀 Deploy & Example Request
+ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com
 
-API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com
-- PRODUCT ENDPOINT :  http://codingwithvudang-bookserver.herokuapp.com/api/v1/product
-  - GET : api/v1/product?page=0&limit=10
-    - Page & Limit are Query Params 
-  - POST : form data
-    - imageUrl : image file
-    - title : string
-    - price : decimal
-    - origin : string
-    - type : string
-    - description : string 
-    - color : string
-    - standard : string
-  - PATCH : edit product ( put these field in form data )
-  - DELETE : delete product with given id ( params id  :id )
-    
+- api/v1/product : PRODUCT API ENDPOINT
+  - ROUTER.get('/',PRODUCT_CONTROLLER.GET_LIST_PRODUCTS)
+  - ROUTER.post(
+     '/',upload.single('imageUrl'),
+     resize,
+     PRODUCT_CONTROLLER.CREATE_PRODUCT);
+  - ROUTER.patch(
+     '/:id',
+     upload.single('imageUrl'),
+     resize,
+     PRODUCT_CONTROLLER.UPDATE_PRODUCT);
+   - ROUTER.delete('/:id',PRODUCT_CONTROLLER.DELETE_PRODUCT)
+  
+- api/v1/user : USER API ENDPOINT
+   - router.post("/register", USER_REGISTER);
+   - router.post("/login", USER_LOGIN);
+   - router.patch("/:id", verifyToken, USER_EDIT);
+   - router.post("/reset_password", USER_RESET_PASSWORD);
+   - router.post("/receive_new_password/:userId/:token", USER_RECEIVE_NEW_PASSWORD);
+   - router.patch(
+     "/photo/:id",
+     verifyToken,
+     upload.single("profile"),
+     USER_UPLOAD_PHOTO
+   );
+   
+- api/v1/favorite : FAVORITE API ENDPOINT
+    - router.get('/', verifyToken, GET_FAVORITES);
+    - router.post('/', verifyToken, POST_FAVORITE);
+    - router.patch('/:userId', verifyToken, DELETE_FAVORITE_ITEM);
+
+- api/v1/order : ORDER API ENDPOINT
+    - router.get('/',verifyToken,GET_ORDERS);
+    - router.post('/', verifyToken, CREATE_ORDER);
+    - router.patch('/:id', verifyToken, UPDATE_ORDER);
+
+- api/v1/product : CART API ENDPOINT
+    - router.get('/', verifyToken, GET_CART);
+    - router.post('/', verifyToken,CREATE_CART);
+    - router.put('/:id', verifyToken, UPDATE_CART);
+    - router.delete('/cartitem/:id', verifyToken, DELETE_CART_ITEM);
+    - router.delete('/:id', verifyToken, DELETE_CART);
+
+
 
 ## 🚀 Get Started
 
