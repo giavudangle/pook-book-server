@@ -34,8 +34,8 @@ const GetOrders = async (req,res) => {
 
 const CreateOrder = async (req, res) => {
   const { items, totalAmount } = req.body.orderInfo;
-  //const { token } = req.body;
-  const token = 'TEST CHARGE'
+  const { token } = req.body;
+  
   const orders = items.map((item) => {
     return `itemID: ${item.item}, quantity:${item.quantity}`;
   });
@@ -60,7 +60,7 @@ const CreateOrder = async (req, res) => {
         amount: totalAmount,
         currency: "usd",
         description: `Order Items: ${orders}`,
-        source: 'tok_mastercard'
+        source: token.id
       });
     } catch (err) {
       res.send(err);
