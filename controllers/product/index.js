@@ -14,12 +14,20 @@ const GetListProducts = (req, res) => {
   let page = parseInt(req.query.page) || 0;
   let limit = parseInt(req.query.limit) || 0;
 
-  Product.find()
+  Product
+    .find()
+    .populate('author')
+    .populate('publisher')
+    .populate('provider')
+    .populate('category')
     .sort(page * limit)
     .skip(page * limit)
     .limit(limit)
     .exec()
     .then((data) => {
+      console.log('====================================');
+      console.log(data);
+      console.log('====================================');
       Product
         .countDocuments()
         .exec()
@@ -63,29 +71,33 @@ const CreateProduct = async (req, res) => {
       })
     )
   }
-  // :))))) Tech Debt :v We can optimize this later :)))
   const originalImagePath =
-  `public/api/static/images/productPictures/${fileName}` 
-  const croppedImagePath = 
-  `public/api/static/images/productPictures/256x144-${fileName}`
+    `public/api/static/images/productPictures/${fileName}`
+  const croppedImagePath =
+    `public/api/static/images/productPictures/256x144-${fileName}`
 
-  const cloudinaryResultRaw = await cloudinary.uploader.upload(originalImagePath)
-  const cloudinaryResultCropped = await cloudinary.uploader.upload(croppedImagePath)
+  // We can optimize upload phase here
+  let cloudinaryResultRaw = await cloudinary.uploader.upload(originalImagePath)
+  let cloudinaryResultCropped = await cloudinary.uploader.upload(croppedImagePath)
+
 
   fs.unlinkSync(originalImagePath)
   fs.unlinkSync(croppedImagePath)
 
+
+
+
   const product = new Product({
     filename: req.file.filename,
+    title: req.body.title,
     price: req.body.price,
-    color: req.body.color,
-    origin: req.body.origin,
-    standard: req.body.standard,
     description: req.body.description,
     url: cloudinaryResultRaw.secure_url,
     thumb: cloudinaryResultCropped.secure_url,
-    type: req.body.type,
-    title: req.body.title
+    author: req.body.authorId,
+    category: req.body.categoryId,
+    provider: req.body.providerId,
+    publisher: req.body.publisherId
   })
 
   try {
@@ -114,13 +126,7 @@ const CreateProduct = async (req, res) => {
 
 const UpdateProduct = async (req, res) => {
   const id = req.params.id;
-  const host = process.env.HOST_NAME;
-  const port =process.env.PORT;
-
-  let filename = '';
-  let imageUrl = '';
-  let resizeUrl = '';
-  const IMAGE_SIZE = '256x144-'
+  const fileName = req.file.filename;
 
   if (!req.params.id || !req.body) {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
@@ -131,25 +137,33 @@ const UpdateProduct = async (req, res) => {
       })
   }
 
-  if (req.file) {
-    filename = await req.file.filename
-    imageUrl = `${host}:${port}/public/api/static/images/productPictures/${filename}`
-    resizeUrl = `${host}:${port}/public/api/static/images/productPictures/${IMAGE_SIZE}${filename}`
-  }
+
+  const originalImagePath =
+    `public/api/static/images/productPictures/${fileName}`
+  const croppedImagePath =
+    `public/api/static/images/productPictures/256x144-${fileName}`
+
+  let cloudinaryResultRaw = await cloudinary.uploader.upload(originalImagePath)
+  let cloudinaryResultCropped = await cloudinary.uploader.upload(croppedImagePath)
+
+
+  fs.unlinkSync(originalImagePath)
+  fs.unlinkSync(croppedImagePath)
+
 
   const product = req.file
     ? {
       filename: req.file.filename,
+      title: req.body.title,
       price: req.body.price,
-      color: req.body.color,
-      origin: req.body.origin,
-      standard: req.body.standard,
       description: req.body.description,
-      url: imageUrl,
-      thumb: resizeUrl,
-      type: req.body.type,
-      title: req.body.title
-      }
+      url: cloudinaryResultRaw.secure_url,
+      thumb: cloudinaryResultCropped.secure_url,
+      author: req.body.authorId,
+      category: req.body.categoryId,
+      provider: req.body.providerId,
+      publisher: req.body.publisherId
+    }
     : req.body;
   try {
     const newProduct = await Product.findByIdAndUpdate(id, product).exec()
@@ -173,24 +187,24 @@ const UpdateProduct = async (req, res) => {
  * @param res
  */
 
-const DeleteProduct = async (req,res) => {
+const DeleteProduct = async (req, res) => {
   const id = req.params.id;
-  if(!id){
+  if (!id) {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE)
       .send({
-        status:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
-        message:CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
-        status:false
+        status: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_STATUS,
+        message: CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_data,
+        status: false
       })
   }
   try {
     await Product.findByIdAndDelete(id).exec();
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE)
       .send({
-        status:SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS,
+        status: SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_STATUS,
         messsage: "Delete Product Successfully",
       })
-  } catch(ex) {
+  } catch (ex) {
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
       status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
       message: ex.message,

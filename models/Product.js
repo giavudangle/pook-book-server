@@ -8,23 +8,12 @@ const productSchema = new Schema(
       required: true,
       unique: true,
     },
-    price: {
-      type: String,
-      required: true,
-    },
     title: {
       type: String,     
     },
-    color: {
+    price: {
       type: String,
       required: true,
-    },
-    origin: {
-      type: String,
-      required: true,
-    },
-    standard: {
-      type: String,
     },
     description: {
       type: String,
@@ -38,10 +27,26 @@ const productSchema = new Schema(
       type: String,
       default: '',
     },
-    type: {
-      type: String,
+    author:{
+      type:Schema.Types.ObjectId,
+      ref:'author',
+      required:true
+    },
+    category: {
+      type: Schema.Types.ObjectId,
+      ref:'category',
       required: true,
     },
+    provider:{
+      type: Schema.Types.ObjectId,
+      ref:'provider',
+      required:true
+    },
+    publisher:{
+      type: Schema.Types.ObjectId,
+      ref:'publisher',
+      required:true
+    }
   },
   { timestamps: true }
 );
