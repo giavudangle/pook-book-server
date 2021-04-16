@@ -1,6 +1,6 @@
 import { Schema as _Schema, model } from 'mongoose';
 const Schema = _Schema;
-const favoriteListSchema = new Schema(
+const favoriteSchema = new Schema(
   {
     userId: {
       type: String,
@@ -20,6 +20,6 @@ const favoriteListSchema = new Schema(
   }
 );
 
-const FavoriteList = model('FavoriteList', favoriteListSchema);
+const Favorite = model('favorite', favoriteSchema);
 
-export default FavoriteList;
+export default Favorite;
