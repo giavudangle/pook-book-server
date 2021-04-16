@@ -4,7 +4,7 @@ export const SERVER_RESPONSE_CONSTANTS = {
   SERVER_ERROR_CODE : 500,
 
   SERVER_SUCCESS_STATUS : 'SUCCESS',
-  SERVER_SUCCESS_CONTENT : 'Your request has been successfully submitted ',
+  SERVER_SUCCESS_CONTENT : 'Your request has been submitted successfully  ',
   SERVER_SUCCESS_CODE : 200,
 
 
