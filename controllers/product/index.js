@@ -48,7 +48,7 @@ const GetListProducts = (req, res) => {
       return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send({
         status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
         message: err.message,
-        data: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_data
+        data: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CONTENT
       })
     })
 
