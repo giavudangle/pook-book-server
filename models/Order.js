@@ -17,7 +17,7 @@ const orderSchema = new Schema(
           ref: "product",
         },
         quantity: {
-          type: String,
+          type: Number,
           required: true,
         },
       },
@@ -27,7 +27,7 @@ const orderSchema = new Schema(
       required: true,
     },
     totalAmount: {
-      type: String,
+      type: Number,
       required: true,
     },
     address: {
