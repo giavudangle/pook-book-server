@@ -1,25 +1,26 @@
 import Order from '../../models/Order';
 import User from '../../models/User';
 
+
 import pushNotification from '../../middlewares/pushNotification';
-import {v4} from 'uuid'
 
 const stripe = require('stripe')(process.env.STRIPE_SECRET_TOKEN);
 
-import {transporter,sendUserOrderTemplate} from '../../middlewares/email'
+import { transporter, sendUserOrderTemplate } from '../../middlewares/email'
+import { MQTT_UpdateStock } from '../warehouse';
 
-const GetOrders = async (req,res) => {
+const GetOrders = async (req, res) => {
   try {
     const orders = await
-    Order.find()
-    .populate('items.item')
-    .populate('userId')
+      Order.find()
+        .populate('items.item')
+        .populate('userId')
     return res.status(200).send({
       status: "OK",
       message: "Get Orders Successfully",
       data: orders,
     });
-  } catch(e) {
+  } catch (e) {
     return res.status(400).send({
       status: "ERR_SERVER",
       message: err.message,
@@ -33,46 +34,76 @@ const GetOrders = async (req,res) => {
  */
 
 const CreateOrder = async (req, res) => {
+
+  // Get list items and total amount from client
   const { items, totalAmount } = req.body.orderInfo;
-  const { token } = req.body;
-  
-  const orders = items.map((item) => {
+
+  // Get User token
+  const { token } = req.body
+
+  // Create form send to Stripe 
+  const orderItemsSendToStripe = items.map((item) => {
     return `itemID: ${item.item}, quantity:${item.quantity}`;
   });
+
+
   if (!req.body) {
-    return res.status(200).send({
+    return res.status(400).send({
       status: "ERR_REQUEST",
       message: "Please check your request!",
       data: null,
     });
   }
+
+  // Mock notification
   let data = {
     title: "Cập nhật đơn hàng",
     body: `Đơn hàng của bạn đã được đặt thành công.`,
   };
 
+  // Create new order via request.body.orderInfo
+  const orderSentFromClient = new Order(req.body.orderInfo);
 
-  const order = new Order(req.body.orderInfo);
-
+  // Check token of user can be charge
   if (Object.keys(token).length !== 0) {
     try {
       stripe.charges.create({
         amount: totalAmount,
         currency: "usd",
-        description: `Order Items: ${orders}`,
-        source: token.id
+        description: `Order Items: ${orderItemsSendToStripe}`,
+        source: token.id || 'tok_visa'
       });
     } catch (err) {
       res.send(err);
     }
   }
+
   try {
-    const resOrder = await order.save();
-    console.log('==============RES ORDER======================');
-    console.log(resOrder);
-    console.log('====================================');
+    // Save current order to the database
+    const resOrder = await orderSentFromClient.save();
+    // Decrese Stock in WareHouse
+    const mappedOrder = orderSentFromClient.items
+    
+    mappedOrder.map(async element => {
+      console.log(element);
+      const flag = await
+        MQTT_UpdateStock(element.item, element.quantity)
+      if (!flag) {
+        return res.status(400).send({
+          status: "FAILED",
+          message: "Product is out of stock",
+          data: null,
+        });
+      }
+    })
+
+    // Find user 
     const user = await User.findById(resOrder.userId);
+
+    // Push new notification to client
     pushNotification(user.pushTokens, data, "");
+
+    // Send email via Nodemailer
     transporter.sendMail(sendUserOrderTemplate(resOrder, user), (err, info) => {
       if (err) {
         res.status(500).send({ err: "Error sending email" });
@@ -95,9 +126,6 @@ const CreateOrder = async (req, res) => {
 };
 
 const UpdateOrder = async (req, res) => {
-  console.log('====================================');
-  console.log(req);
-  console.log('====================================');
   const { id } = req.params;
   const updateStatus = req.body.status;
   if (!req.params.id) {
