@@ -67,7 +67,21 @@ const addNewProductToWareHouse = async (req,res) => {
       error:err.message
     })
   }
+}
 
+
+// Write a function that update stocks of product by product id
+// input : productId
+// output : stock
+
+const updateStockByProductId = async (product,stocks) => {
+  const {stock} = await WareHouse.findOne({product})
+  const test = parseInt(stock) - parseInt(stocks) 
+  if (test < 0) {
+    return false
+  }
+ await WareHouse.updateOne({product},{stock : test})
+ return true
 }
 
 
@@ -106,5 +120,6 @@ export {
   CheckAvailableProductInWareHouse as CHECK_AVAILABLE_PRODUCT,
   addNewProductToWareHouse as ADD_NEW_PRODUCT_TO_WAREHOUSE,
   updateProductInWareHouse as UPDATE_PRODUCT_IN_WAREHOUSE,
-  deleteAllProductsInWareHouse as DELETE_ALL_PRODUCTS_IN_WAREHOUSE
+  deleteAllProductsInWareHouse as DELETE_ALL_PRODUCTS_IN_WAREHOUSE,
+  updateStockByProductId as MQTT_UpdateStock
 }
