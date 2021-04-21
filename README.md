@@ -77,10 +77,76 @@ ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com ( havent up
 
 ```
 
+## 🚀 Example Request
+**Please provider auth-token (JWT) in Headers of Request**
+
+**CREATE NEW ORDER**
+- POST localhost:8080/api/v1/orders
+- Test on local :  Headers : auth-token (JWT token) Body (JSON form )
+- Request Body : 
+
+```json
+{
+"orderInfo": {
+    "totalAmount": 5000,
+    "userId" : "607ec5f6e3a5d0091ff78025",
+    "items":[
+        {
+            "item":"60796508f7359b10225c5daa",
+            "quantity":10
+        },
+        {
+            "item":"607f074e3ca27f92d39fcf20",
+            "quantity":10
+        }
+    ],
+    "name": "Vudang",
+    "address" : "67 Huynh Thien Loc",
+    "phone":"09667881234",
+    "paymentMethod":"607fe47b4ebfda44935ff96b",
+    "status":"607fe50d4ebfda44935ff971"
+},
+    "token":"TestToken"
+}
+
+```
+
+**LOGIN**
+- POST localhost:8080/api/v1/user/login
+- Request Body : 
+```json
+{
+    "email":"admin@gmail.com",
+    "password":"admin",
+    "pushTokens" :[]
+}
+```
+
+**ADD TO CART**
+- POST localhost:8080/api/v1/carts
+- Test on local :  Headers : auth-token (JWT token) Body (JSON form )
+- Request Body : 
+
+```json
+{
+    "userId": "605048dbcafa1206c221d275",
+    "items": [
+        {
+            "item":"605449411d6e5b1185c9d2de",          
+            "quantity": "20"
+        }
+    ]
+}
+```
+
+
+
+
+
 ## 🚀 Samples JSON Response
 **Please provider auth-token (JWT) in Headers of Request**
 
-GET : Products in Warehouse
+- GET : Products in Warehouse
 ```json
 {
     "data": [
@@ -120,7 +186,7 @@ GET : Products in Warehouse
 }
 ```
 
-GET : Product in Cart
+- GET : Product in Cart
 ```json
 {
     "status": "OK",
@@ -157,7 +223,7 @@ GET : Product in Cart
 ```
 
 
-POST : Register
+- POST : Register
 ```json
 {
     "status": "Success",
@@ -180,7 +246,7 @@ POST : Register
 
 
 
-POST : Login
+- POST : Login
 ```json
 {
     "userid": "607ec5f6e3a5d0091ff78025",
@@ -198,7 +264,7 @@ POST : Login
 
 
 
-GET : Orders by UserID
+- GET : Orders by UserID
 ```json
 {
     "status": "OK",
@@ -227,7 +293,7 @@ GET : Orders by UserID
 ```
 
 
-GET : Favorite by UserID
+- GET : Favorite by UserID
 ``` json
 {
     "status": "OK",
@@ -306,14 +372,14 @@ Happy coding 😍😍😍
 ```
 
 ## 🚀 Server Features
-- Create User, Reset Password. ( )
-- CRUD Products, Users, Carts, Whislist, Order.
+- Login, Register, Forgot Password, ResetPassword with JWT Flow. 
+- CRUD Products, Users, Carts, Whislist, Order...
 - Fetch Products, Carts, Orders...
 - Products url query (http://codingwithvudang-bookserver.herokuapp.com/api/v1/product?limit=2&page=1)
 - Send email to user.
 - Push notification to user's devices.
-- Payment.
-- Upload and resize photo.
+- Payment via Stripe
+- Upload and resize photo 
 
 
 ## Technical details
