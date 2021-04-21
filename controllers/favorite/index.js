@@ -3,7 +3,36 @@ import Favorite from "../../models/Favorite";
 
 const GetFavorites = (req, res) => {
   Favorite.find()
-    .populate("items") //access to items ref from product
+    .populate([
+      {
+        path: 'items.item',
+        populate: [{
+          path: 'author',
+          model: 'author'
+        }]
+      },
+      {
+        path: 'items.item',
+        populate: [{
+          path: 'category',
+          model: 'category'
+        }]
+      },
+      {
+        path: 'items.item',
+        populate: [{
+          path: 'provider',
+          model: 'provider'
+        }]
+      },
+      {
+        path: 'items.item',
+        populate: [{
+          path: 'publisher',
+          model: 'publisher'
+        }]
+      },
+    ])
     .then((data) => {
       return res.status(200).send({
         status: "OK",
@@ -53,7 +82,7 @@ const PostFavorite = (req, res) => {
     } else {
       const favorite = new Favorite({
         userId: req.body.userId,
-        items: req.body.items[0].item,
+        items: req.body.items
       });
       favorite
         .save()

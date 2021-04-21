@@ -9,9 +9,11 @@ const favoriteSchema = new Schema(
     items: [
       {
         _id: false,
-        type: _Schema.Types.ObjectId,
-        required: true,
-        ref: 'product',
+        item: {
+          type: _Schema.Types.ObjectId,
+          required: true,
+          ref: "product",
+        },
       },
     ],
   },
@@ -23,3 +25,4 @@ const favoriteSchema = new Schema(
 const Favorite = model('favorite', favoriteSchema);
 
 export default Favorite;
+
