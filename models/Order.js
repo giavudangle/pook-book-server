@@ -1,4 +1,4 @@
-import { Schema as _Schema, model } from "mongoose";
+import { Schema as _Schema, model, Types } from "mongoose";
 const Schema = _Schema;
 
 const orderSchema = new Schema(
@@ -39,12 +39,14 @@ const orderSchema = new Schema(
       required: true,
     },
     paymentMethod: {
-      type: String,
+     type:Types.ObjectId,
+      ref:'PaymentMethod',
       required: true,
     },
     status: {
       //waiting, confirmed, delivery, success
-      type: String, 
+      type: Types.ObjectId,
+      ref:'Status', 
       default: "waiting",
     },
   },
