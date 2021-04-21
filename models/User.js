@@ -1,7 +1,7 @@
 import { Schema as _Schema, model } from 'mongoose';
 const Schema = _Schema;
 
-const registerSchema = new Schema({
+const userSchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -35,5 +35,5 @@ const registerSchema = new Schema({
   }
 },{timestamps:true});
 
-const Register = model('user', registerSchema);
-export default Register;
+const User = model('user', userSchema);
+export default User;
