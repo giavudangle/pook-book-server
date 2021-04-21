@@ -15,10 +15,15 @@
 ## 🚀 Contributors
 - Vudang
 
+## 🚀 ERD
+<img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1618992281/image_l345jz.png" />
+
 ## 🚀 Deploy & Example Request
 ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com
 
-- api/v1/product : PRODUCT API ENDPOINT
+```bash
+
+- api/v1/products : PRODUCT API ENDPOINT
   - ROUTER.get('/',PRODUCT_CONTROLLER.GET_LIST_PRODUCTS)
   - ROUTER.post(
      '/',upload.single('imageUrl'),
@@ -61,7 +66,7 @@ ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com
     - router.delete('/cartitem/:id', verifyToken, DELETE_CART_ITEM);
     - router.delete('/:id', verifyToken, DELETE_CART);
 
-
+```
 
 ## 🚀 Get Started
 
