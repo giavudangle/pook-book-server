@@ -11,16 +11,51 @@ import { MQTT_UpdateStock } from '../warehouse';
 
 const GetOrders = async (req, res) => {
   try {
+
+    // Nested population :))))
+    // Because DB was designed by SQL-Mindset
+    // Wrong architecture of No-SQL Database
     const orders = await
       Order.find()
-        .populate('items.item')
+        .populate([
+          {
+            path: 'items.item',
+            populate: [{
+              path: 'author',
+              model: 'author'
+            }]
+          },
+          {
+            path: 'items.item',
+            populate: [{
+              path: 'category',
+              model: 'category'
+            }]
+          },
+          {
+            path: 'items.item',
+            populate: [{
+              path: 'provider',
+              model: 'provider'
+            }]
+          },
+          {
+            path: 'items.item',
+            populate: [{
+              path: 'publisher',
+              model: 'publisher'
+            }]
+          },
+        ])
         .populate('userId')
+        .populate('paymentMethod')
+        .populate('status')
     return res.status(200).send({
       status: "OK",
       message: "Get Orders Successfully",
       data: orders,
     });
-  } catch (e) {
+  } catch (err) {
     return res.status(400).send({
       status: "ERR_SERVER",
       message: err.message,
@@ -83,7 +118,7 @@ const CreateOrder = async (req, res) => {
     const resOrder = await orderSentFromClient.save();
     // Decrese Stock in WareHouse
     const mappedOrder = orderSentFromClient.items
-    
+
     mappedOrder.map(async element => {
       console.log(element);
       const flag = await
@@ -129,7 +164,7 @@ const UpdateOrder = async (req, res) => {
   const { id } = req.params;
   const updateStatus = req.body.status;
   if (!req.params.id) {
-    return res.status(200).send({
+    return res.status(400).send({
       status: "ERR_REQUEST",
       message: "Please check your ID request",
       data: null,
@@ -159,8 +194,17 @@ const UpdateOrder = async (req, res) => {
   }
 };
 
+const DeleteAllOrders = async (req, res) => {
+  await Order.deleteMany({})
+  return res.status(200).send({
+    status: "OK",
+    message: "Delete All Order Successfully",
+  });
+}
+
 export {
   GetOrders as GET_ORDERS,
   CreateOrder as CREATE_ORDER,
-  UpdateOrder as UPDATE_ORDER
+  UpdateOrder as UPDATE_ORDER,
+  DeleteAllOrders as DELETE_ALL_ORDERS
 }
