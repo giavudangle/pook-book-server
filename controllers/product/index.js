@@ -24,10 +24,7 @@ const GetListProducts = (req, res) => {
     .skip(page * limit)
     .limit(limit)
     .exec()
-    .then((data) => {
-      console.log('====================================');
-      console.log(data);
-      console.log('====================================');
+    .then((data) => {    
       Product
         .countDocuments()
         .exec()
@@ -80,11 +77,8 @@ const CreateProduct = async (req, res) => {
   let cloudinaryResultRaw = await cloudinary.uploader.upload(originalImagePath)
   let cloudinaryResultCropped = await cloudinary.uploader.upload(croppedImagePath)
 
-
   fs.unlinkSync(originalImagePath)
   fs.unlinkSync(croppedImagePath)
-
-
 
 
   const product = new Product({
@@ -97,7 +91,8 @@ const CreateProduct = async (req, res) => {
     author: req.body.authorId,
     category: req.body.categoryId,
     provider: req.body.providerId,
-    publisher: req.body.publisherId
+    publisher: req.body.publisherId,
+    stocks : req.body.stocks
   })
 
   try {
@@ -111,7 +106,6 @@ const CreateProduct = async (req, res) => {
     return res.status(400).send({
       status: SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_STATUS,
       message: e.message,
-      data: null,
     });
   }
 
@@ -162,7 +156,8 @@ const UpdateProduct = async (req, res) => {
       author: req.body.authorId,
       category: req.body.categoryId,
       provider: req.body.providerId,
-      publisher: req.body.publisherId
+      publisher: req.body.publisherId,
+      stocks : req.body.stocks
     }
     : req.body;
   try {
@@ -213,12 +208,25 @@ const DeleteProduct = async (req, res) => {
   }
 }
 
+const MQTT_DecreaseStocksByProductID  = async (productID,decStocks) => {
+  const product = await Product.findOne({_id:productID});
+  const current_stocks = product.stocks
+  product.stocks = current_stocks - decStocks;
+  if (product.stocks>=0){
+    await product.save()
+    return true; 
+  }else  {
+    return false;
+  }
+}
+
 
 export {
   GetListProducts as GET_LIST_PRODUCTS,
   CreateProduct as CREATE_PRODUCT,
   UpdateProduct as UPDATE_PRODUCT,
-  DeleteProduct as DELETE_PRODUCT
+  DeleteProduct as DELETE_PRODUCT,
+  MQTT_DecreaseStocksByProductID
 };
 
 

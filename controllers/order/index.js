@@ -7,11 +7,10 @@ import pushNotification from '../../middlewares/pushNotification';
 const stripe = require('stripe')(process.env.STRIPE_SECRET_TOKEN);
 
 import { transporter, sendUserOrderTemplate } from '../../middlewares/email'
-import { MQTT_UpdateStock } from '../warehouse';
+import { MQTT_DecreaseStocksByProductID } from '../product';
 
 const GetOrders = async (req, res) => {
   try {
-
     // Nested population :))))
     // Because DB was designed by SQL-Mindset
     // Wrong architecture of No-SQL Database
@@ -48,8 +47,6 @@ const GetOrders = async (req, res) => {
           },
         ])
         .populate('userId')
-        .populate('paymentMethod')
-        .populate('status')
     return res.status(200).send({
       status: "OK",
       message: "Get Orders Successfully",
@@ -99,6 +96,20 @@ const CreateOrder = async (req, res) => {
   // Create new order via request.body.orderInfo
   const orderSentFromClient = new Order(req.body.orderInfo);
 
+  // Decrease stocks of every product in list products
+  const listItems = req.body.orderInfo.items;
+
+
+  await Promise.all(listItems.map(async (item) => {
+    const flag = await MQTT_DecreaseStocksByProductID(item.item,item.quantity)
+    if(!flag){
+      return res.status(400).send({
+        status: "ERR_REQUEST",
+        message: `Once or more item is out of stocks`,
+      });
+    }
+  }))
+
   // Check token of user can be charge
   if (Object.keys(token).length !== 0) {
     try {
@@ -116,21 +127,6 @@ const CreateOrder = async (req, res) => {
   try {
     // Save current order to the database
     const resOrder = await orderSentFromClient.save();
-    // Decrese Stock in WareHouse
-    const mappedOrder = orderSentFromClient.items
-
-    mappedOrder.map(async element => {
-      console.log(element);
-      const flag = await
-        MQTT_UpdateStock(element.item, element.quantity)
-      if (!flag) {
-        return res.status(400).send({
-          status: "FAILED",
-          message: "Product is out of stock",
-          data: null,
-        });
-      }
-    })
 
     // Find user 
     const user = await User.findById(resOrder.userId);

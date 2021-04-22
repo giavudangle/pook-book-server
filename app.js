@@ -41,10 +41,6 @@ import AUTHOR_ROUTE from './routes/author'
 import CATEGORY_ROUTE from './routes/category'
 import PROVIDER_ROUTE from './routes/provider'
 import PUBLISHER_ROUTE from './routes/publisher'
-import WAREHOUSE_ROUTE from './routes/warehouse'
-import STATUS_ROUTE from './routes/status'
-import PAYMENT_METHOD_ROUTE from './routes/payment-method'
-
 
 
 import PUSH_NOTIFICATION from './middlewares/pushNotification'
@@ -133,8 +129,6 @@ app.use(`/api/${process.env.VERSION}/authors`, AUTHOR_ROUTE);
 app.use(`/api/${process.env.VERSION}/categories`, CATEGORY_ROUTE);
 app.use(`/api/${process.env.VERSION}/providers`, PROVIDER_ROUTE);
 app.use(`/api/${process.env.VERSION}/publishers`, PUBLISHER_ROUTE);
-app.use(`/api/${process.env.VERSION}/warehouses`, WAREHOUSE_ROUTE);
-app.use(`/api/${process.env.VERSION}/payment-methods`, PAYMENT_METHOD_ROUTE);
-app.use(`/api/${process.env.VERSION}/status`, STATUS_ROUTE);
+
 
 

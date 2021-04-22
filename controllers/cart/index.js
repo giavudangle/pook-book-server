@@ -54,9 +54,6 @@ const CreateCart = (req, res) => {
           })
           .catch((err) => console.log(err));
       } else {
-        console.log('====================================');
-        console.log('In else');
-        console.log('====================================');
         result.items[cartIndex].quantity = (
           Number(result.items[cartIndex].quantity) + 1
         ).toString();

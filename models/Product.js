@@ -46,6 +46,17 @@ const productSchema = new Schema(
       type: Schema.Types.ObjectId,
       ref:'publisher',
       required:true
+    },
+    stocks :{
+      type: Number,
+      required:true,
+      default:0,
+      validate:{
+        validator: function(s) {
+          return parseInt(s) >=0
+        },
+        message:'Stock of product must be greater than zero'
+      },
     }
   },
   { timestamps: true }

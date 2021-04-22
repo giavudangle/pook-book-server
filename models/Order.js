@@ -1,6 +1,7 @@
 import { Schema as _Schema, model, Types } from "mongoose";
 const Schema = _Schema;
 
+
 const orderSchema = new Schema(
   {
     userId: {
@@ -39,14 +40,14 @@ const orderSchema = new Schema(
       required: true,
     },
     paymentMethod: {
-     type:Types.ObjectId,
-      ref:'PaymentMethod',
-      required: true,
+      type: String,
+      enum : ['Visa','Master Card','COD','American Express','Discover'],
+      default : 'COD'
     },
     status: {
       //waiting, confirmed, delivery, success
-      type: Types.ObjectId,
-      ref:'Status', 
+      type: String,
+      enum:['waitting','confirmed','delivery','success'],
       default: "waiting",
     },
   },

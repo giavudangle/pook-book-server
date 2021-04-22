@@ -3,36 +3,7 @@ import Favorite from "../../models/Favorite";
 
 const GetFavorites = (req, res) => {
   Favorite.find()
-    .populate([
-      {
-        path: 'items.item',
-        populate: [{
-          path: 'author',
-          model: 'author'
-        }]
-      },
-      {
-        path: 'items.item',
-        populate: [{
-          path: 'category',
-          model: 'category'
-        }]
-      },
-      {
-        path: 'items.item',
-        populate: [{
-          path: 'provider',
-          model: 'provider'
-        }]
-      },
-      {
-        path: 'items.item',
-        populate: [{
-          path: 'publisher',
-          model: 'publisher'
-        }]
-      },
-    ])
+    .populate('items.item')
     .then((data) => {
       return res.status(200).send({
         status: "OK",
