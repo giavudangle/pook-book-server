@@ -16,6 +16,7 @@
 - Vudang
 
 ## 🚀 ERD
+- VIẾT THÊM MÔ TẢ
 <img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1619083716/image_1_qxchty.png" />
 
 ## 🚀 API DOCS
