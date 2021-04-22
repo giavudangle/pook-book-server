@@ -16,7 +16,7 @@
 - Vudang
 
 ## 🚀 ERD
-<img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1618992281/image_l345jz.png" />
+<img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1619083716/image_1_qxchty.png" />
 
 ## 🚀 API DOCS
 ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com ( havent upgraded yet )
