@@ -20,7 +20,7 @@
 ### **ERD**
 <img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1619083716/image_1_qxchty.png" />
 
-### **System Analysis and Database Design 🚀 **
+### 🚀 System Analysis and Database Design 🚀 
 
 #### Database Modeling & Relationships
 - **PRODUCT** contains : ID, Name, Author, Category, Publisher, Provider, Price, ImageUrl, ThumbImageUrl and Stocks
