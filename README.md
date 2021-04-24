@@ -47,14 +47,15 @@
 
 - **USER** contains : ID, Name, Email, Password, Address(opt), Phone(opt), ImageUrl(opt) and PushTokens ( for technical implementation )
    - A User has one to many Order and an order belongs to one User
-   - Users can add any products to cart
    - Users can reset their password
+   - Customer(dont have an account) can login, register to become User
 
 
 - **CART** contains : ID, userID, productID,Quantity
    - A Cart has one to many Product and a Product belongs to one or many Cart 
    - Each of the Products will be identified by ID & Title
- 
+   - Users can add any products to cart
+
 - **FAVORITE** contains : ID, userID, productID
    - A Favorite has one to many Product and a Product belongs to one or many Favorite 
    - Each of the Products will be identified by ID & Title
