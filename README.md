@@ -22,7 +22,6 @@
 
 ### 🚀 System Analysis and Database Design 🚀 
 
-#### Database Modeling & Relationships
 - **PRODUCT** contains : ID, Name, Author, Category, Publisher, Provider, Price, ImageUrl, ThumbImageUrl and Stocks
    - A Product has one to many Category and a Category belongs to one or many Product . 
       - Each of the Categories will be identified by ID & Name  
@@ -34,13 +33,23 @@
       - Each of the Providers will be identified by ID & Name & Code 
    - A Product has one to many Order_Detail and an Order_Detail belongs to one Product . 
       - Each of the Order_Detail will be identified by ID 
-- **ORDER_DETAIL** contains : ID, OrderID, Quantity and ProductID
+   - The Stocks by Product will be decreased per stocks in User's Order when user create new order successfully.
+   - The products can be searched by Name and turn them into list.
 
 - **ORDER** contains : ID, userID, Name, Address, Phone, Date, PaymentMethod, Status and Total Amount
    - An Order has one to many Order_Detail and an Order_Detail belongs to one ORDER
+   - Customer who want to buy Product (createOrder) must Login. 
+   - PookBook also accept Customer register new account for being new User.
+   - User can buy any products if these's stocks are greater than zero ( stocks > 0 ).
+   - The Order will be updated automatically ( tracking status )
+ 
+- **ORDER_DETAIL** contains : ID, OrderID, Quantity and ProductID
 
 - **USER** contains : ID, Name, Email, Password, Address(opt), Phone(opt), ImageUrl(opt) and PushTokens ( for technical implementation )
    - A User has one to many Order and an order belongs to one User
+   - Users can add any products to cart
+   - Users can reset their password
+
 
 - **CART** contains : ID, userID, productID,Quantity
    - A Cart has one to many Product and a Product belongs to one or many Cart 
@@ -49,17 +58,7 @@
 - **FAVORITE** contains : ID, userID, productID
    - A Favorite has one to many Product and a Product belongs to one or many Favorite 
    - Each of the Products will be identified by ID & Title
-
-#### System Analysis
-   - Customer who want to buy Product (createOrder) must Login. 
-   - PookBook also accept Customer register new account for being new User.
-   - User can buy any products if these's stocks are greater than zero ( stocks > 0 ).
-   - The Stocks by Product will be decreased per stocks in User's Order when user create new order successfully.
-   - The Order will be updated automatically ( tracking status )
-   - User can add any products to cart
    - User can add any products to favorite
-
- 
 
 
 
