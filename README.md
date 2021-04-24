@@ -15,9 +15,45 @@
 ## 🚀 Contributors
 - Vudang
 
-## 🚀 ERD
-- VIẾT THÊM MÔ TẢ
+## 🚀 ERD - Database Analysis and Desgin
+
+### **ERD**
 <img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1619083716/image_1_qxchty.png" />
+
+### **Database Analysis and Design 🚀 **
+
+
+- **PRODUCT** contains : ID, Name, Author, Category, Publisher, Provider, Price, ImageUrl, ThumbImageUrl and Stocks
+   - A Product has one to many Category and a Category belongs to one or many Product . 
+      - Each of the Categories will be identified by ID & Name  
+   - A Product has one to many Author and a Author belongs to one or many Product . 
+      - Each of the Authors will be identified by ID & Name  
+   - A Product has one to many Publisher and a Publisher belongs to one or many Product . 
+      - Each of the Publishers will be identified by ID & Name & Code 
+   - A Product has one to many Provider and a Provider belongs to one or many Product . 
+      - Each of the Providers will be identified by ID & Name & Code 
+   - A Product has one to many Order_Detail and an Order_Detail belongs to one Product . 
+      - Each of the Order_Detail will be identified by ID 
+- **ORDER_DETAIL** contains : ID, OrderID, Quantity and ProductID
+
+- **ORDER** contains : ID, userID, Name, Address, Phone, Date, PaymentMethod, Status and Total Amount
+   - An Order has one to many Order_Detail and an Order_Detail belongs to one ORDER
+ 
+- **USER** contains : ID, Name, Email, Password, Address(opt), Phone(opt), ImageUrl(opt) and PushTokens ( for technical implementation )
+   - Customer who want to buy Product must Login. PookBook also accept Customer register new account for being new User
+   - A User has one to many Order and an order belongs to one User
+
+- **CART** contains : ID, userID, productID,Quantity
+   - A Cart has one to many Product and a Product belongs to one or many Cart 
+   - Each of the Products will be identified by ID & Title
+ 
+- **FAVORITE** contains : ID, userID, productID
+   - A Favorite has one to many Product and a Product belongs to one or many Favorite 
+   - Each of the Products will be identified by ID & Title
+
+ 
+
+
 
 ## 🚀 API DOCS
 ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com ( havent upgraded yet )
