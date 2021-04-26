@@ -63,7 +63,7 @@
    - User can add any products to favorite
 
 #### System Analysis 🚀
- Authentication
+ - Authentication
   - Allow any customer can register to become a member.
   - Allow user request to get a new password ( forgot password )
   - Auto sends email when customers register, order successfully, or request to get a new password.
