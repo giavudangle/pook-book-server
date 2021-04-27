@@ -32,7 +32,7 @@
       - Each of the Publishers will be identified by ID & Name & Code 
    - A Product has one to many Provider and a Provider belongs to one or many Product . 
       - Each of the Providers will be identified by ID & Name & Code 
-   - A Product has one to many Order_Detail and an Order_Detail belongs to one Product . 
+   - A Product belongs to one or many Order_Detail and an Order_Detail has one to many product . 
       - Each of the Order_Detail will be identified by ID 
    - The Stocks by Product will be decreased per stocks in User's Order when user create new order successfully.
    - The products can be searched by Name and turn them into list.
