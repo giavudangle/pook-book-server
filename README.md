@@ -107,10 +107,16 @@ ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com ( havent up
 
 ```bash
 
-- api/v1/users
-  - /login
-  - /register
+-ENDPOINT: api/v1/users
+  - POST: /login : provide email,password,pushTokens in JSON body.Login To Server
+  - POST: /register : provide email,name,password.Register new account.
+  - EDIT : 
 - api/v1/products
+  - GET : / :  Return list products
+  - POST : /:id : Create new product
+  - PUT : /:id : Edit product detail
+  - DELETE : /:id : Delete All Products
+
 - api/v1/favorites
 - api/v1/carts
 - api/v1/categories : CATEGORIES API ENDPOINT
