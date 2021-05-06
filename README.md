@@ -25,13 +25,13 @@
 #### Database Design 🚀
 - **PRODUCT** contains : ID, Name, Author, Category, Publisher, Provider, Price, ImageUrl, ThumbImageUrl and Stocks
    - A Product has one to many Category and a Category belongs to one or many Product . 
-      - Each of the Categories will be identified by ID & Name  
+      - Each of the Categories will be identified by ID & Name & Code 
    - A Product has one to many Author and a Author belongs to one or many Product . 
       - Each of the Authors will be identified by ID & Name  
    - A Product has one to many Publisher and a Publisher belongs to one or many Product . 
-      - Each of the Publishers will be identified by ID & Name & Code 
+      - Each of the Publishers will be identified by ID & Name 
    - A Product has one to many Provider and a Provider belongs to one or many Product . 
-      - Each of the Providers will be identified by ID & Name & Code 
+      - Each of the Providers will be identified by ID & Name 
    - A Product belongs to one or many Order_Detail and an Order_Detail has one to many product . 
       - Each of the Order_Detail will be identified by ID 
    - The Stocks by Product will be decreased per stocks in User's Order when user create new order successfully.
