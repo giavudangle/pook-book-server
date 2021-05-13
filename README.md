@@ -15,6 +15,28 @@
 ## 🚀 Contributors
 - Vudang
 
+## 🚀 Server Features
+- Login, Register, Forgot Password, ResetPassword with JWT Flow. 
+- CRUD Products, Users, Carts, Whislist, Order...
+- Fetch Products, Carts, Orders...
+- Products url query (http://codingwithvudang-bookserver.herokuapp.com/api/v1/product?limit=2&page=1)
+- Send email to user.
+- Push notification to user's devices.
+- Payment via Stripe
+- Upload and resize photo 
+
+
+## Technical details
+- Nodejs, Express.
+- Mongodb, Mongoose.
+- Nodemailer.
+- Multer, Sharp.
+- Hapi/joi validation.
+- Expo notification.
+- Stripe Payment.
+  
+  
+
 ## 🚀 ERD - System Analysis - Database Design 🚀
 
 ### **ERD**
@@ -126,6 +148,9 @@ ROOT API ENDPOINT : http://codingwithvudang-bookserver.herokuapp.com ( havent up
 
 
 ```
+
+
+
 
 ## 🚀 Example Request
 **Please provider auth-token (JWT) in Headers of Request**
@@ -484,27 +509,7 @@ Change the constants in .env file (your database, host, port,cloudinary key,stri
 Happy coding 😍😍😍
 ```
 
-## 🚀 Server Features
-- Login, Register, Forgot Password, ResetPassword with JWT Flow. 
-- CRUD Products, Users, Carts, Whislist, Order...
-- Fetch Products, Carts, Orders...
-- Products url query (http://codingwithvudang-bookserver.herokuapp.com/api/v1/product?limit=2&page=1)
-- Send email to user.
-- Push notification to user's devices.
-- Payment via Stripe
-- Upload and resize photo 
 
-
-## Technical details
-- Nodejs, Express.
-- Mongodb, Mongoose.
-- Nodemailer.
-- Multer, Sharp.
-- Hapi/joi validation.
-- Expo notification.
-- Stripe Payment.
-  
-  
 
 
 
