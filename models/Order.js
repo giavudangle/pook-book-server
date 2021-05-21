@@ -41,13 +41,13 @@ const orderSchema = new Schema(
     },
     paymentMethod: {
       type: String,
-      enum : ['Visa','Master Card','COD','American Express','Discover'],
+      enum : ['COD','CC'],
       default : 'COD'
     },
     status: {
       //waiting, confirmed, delivery, success
       type: String,
-      enum:['waitting','confirmed','delivery','success'],
+      enum:['waiting','confirmed','delivery','success'],
       default: "waiting",
     },
   },

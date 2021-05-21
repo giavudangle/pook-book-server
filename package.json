@@ -5,12 +5,16 @@
   "main": "index.js",
   "scripts": {
     "start": "babel-node app.js",
-    "dev": "nodemon --exec babel-node app.js"
+    "dev": "nodemon --exec babel-node app.js",
+    "tunnel": "ngrok http 8080"
   },
   "keywords": [],
   "author": "vudang",
   "license": "ISC",
   "dependencies": {
+    "@babel/core": "^7.13.10",
+    "@babel/node": "^7.13.10",
+    "@babel/preset-env": "^7.13.10",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.25.0",
@@ -21,16 +25,16 @@
     "joi": "^17.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.24",
+    "morgan": "^1.10.0",
     "multer": "^1.4.2",
     "nodemailer": "^6.4.11",
     "nodemon": "^2.0.4",
     "path": "^0.12.7",
     "sharp": "^0.25.4",
     "stripe": "^8.90.0",
-    "uuid": "^8.3.0",
-    "@babel/core": "^7.13.10",
-    "@babel/node": "^7.13.10",
-    "@babel/preset-env": "^7.13.10",
-    "morgan": "^1.10.0"
+    "uuid": "^8.3.0"
+  },
+  "devDependencies": {
+    "ngrok": "^4.0.1"
   }
 }

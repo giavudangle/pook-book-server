@@ -10,7 +10,7 @@ router.post('/', verifyToken,CREATE_CART);
 
 router.put('/:id', verifyToken, UPDATE_CART);
 
-router.delete('/cartitem/:id', verifyToken, DELETE_CART_ITEM);
+router.delete('/cart-item/:id', verifyToken, DELETE_CART_ITEM);
 
 router.delete('/:id', verifyToken, DELETE_CART);
 
