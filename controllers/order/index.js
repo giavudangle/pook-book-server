@@ -62,22 +62,20 @@ const GetOrders = async (req, res) => {
 }
 
 /**
- * Send a order
- */
+|--------------------------------------------------
+| CREATE NEW ORDER METHOD
+|--------------------------------------------------
+*/
 
 const CreateOrder = async (req, res) => {
-
   // Get list items and total amount from client
   const { items, totalAmount } = req.body.orderInfo;
-
   // Get User token
   const { token } = req.body
-
   // Create form send to Stripe 
   const orderItemsSendToStripe = items.map((item) => {
     return `itemID: ${item.item}, quantity:${item.quantity}`;
   });
-
 
   if (!req.body) {
     return res.status(400).send({
@@ -87,36 +85,13 @@ const CreateOrder = async (req, res) => {
     });
   }
 
-  // Mock notification
-  let data = {
-    title: "Cập nhật đơn hàng",
-    body: `Đơn hàng của bạn đã được đặt thành công.`,
-  };
-
-  // Create new order via request.body.orderInfo
-  const orderSentFromClient = new Order(req.body.orderInfo);
-
-  // Decrease stocks of every product in list products
-  const listItems = req.body.orderInfo.items;
-
-
-  await Promise.all(listItems.map(async (item) => {
-    const flag = await MQTT_DecreaseStocksByProductID(item.item,item.quantity)
-    if(!flag){
-      return res.status(400).send({
-        status: "ERR_REQUEST",
-        message: `Once or more item is out of stocks`,
-      });
-    }
-  }))
-
   // Check token of user can be charge
   if (Object.keys(token).length !== 0) {
     try {
       stripe.charges.create({
         amount: totalAmount,
-        currency: "usd",
-        description: `Order Items: ${orderItemsSendToStripe}`,
+        currency: "vnd",
+        description: `Pookbook's clients Order Items: ${orderItemsSendToStripe}`,
         source: token.id || 'tok_visa'
       });
     } catch (err) {
@@ -124,37 +99,87 @@ const CreateOrder = async (req, res) => {
     }
   }
 
-  try {
-    // Save current order to the database
-    const resOrder = await orderSentFromClient.save();
+  const state = req.body.orderInfo;
 
-    // Find user 
-    const user = await User.findById(resOrder.userId);
+  const orderSaveToDB = new Order({
+    userId: state.userId,
+    items: state.items,
+    name: state.name,
+    totalAmount: state.totalAmount,
+    address: state.address,
+    phone: state.phone,
+    paymentMethod: state.paymentMethod,
 
-    // Push new notification to client
-    pushNotification(user.pushTokens, data, "");
+  })
 
-    // Send email via Nodemailer
-    transporter.sendMail(sendUserOrderTemplate(resOrder, user), (err, info) => {
-      if (err) {
-        res.status(500).send({ err: "Error sending email" });
-      } else {
-        console.log(`** Email sent **`, info);
-      }
-    });
-    res.status(200).send({
-      status: "OK",
-      message: "Added Order Successfully",
-      data: resOrder,
-    });
-  } catch (err) {
-    return res.status(400).send({
-      status: "ERR_SERVER",
-      message: err.message,
-      data: null,
-    });
-  }
-};
+  console.log('====================================');
+  console.log(orderSaveToDB);
+  console.log('====================================');
+
+  orderSaveToDB
+    .save()
+    .then((savedOrder) => {
+      const listItems = req.body.orderInfo.items;
+      console.log('====================================');
+      console.log(savedOrder);
+      console.log('====================================');
+      //Decrease stocks of every product in list products
+      Promise.all(listItems.map(async (item) => {
+        const flag = await MQTT_DecreaseStocksByProductID(item.item, item.quantity)
+        if (!flag) {
+          return res.status(400).send({
+            status: "ERR_REQUEST",
+            message: `Once or more item is out of stocks`,
+          });
+        }
+      }))
+
+      // Find user 
+      User.findOne(savedOrder.userId)
+        .then(user => {
+          // Push new notification to client
+          //pushNotification(user.pushTokens, data, "");
+          // Mock notification
+          // let data = {
+          //   title: "Cập nhật đơn hàng",
+          //   body: `Đơn hàng của bạn đã được đặt thành công.`,
+
+          //Send email via Nodemailer
+          transporter.sendMail(sendUserOrderTemplate(savedOrder, user), (err, info) => {
+            if (err) {
+              res.status(500).send({ err: "Error sending email" });
+            } else {
+              console.log(`** Email sent **`, info);
+            }
+          });
+          return res.status(200).send({
+            status: "OK",
+            message: "Added Order Successfully",
+            data: savedOrder,
+          });
+
+        })
+        .catch(e => {
+          return res.status(400).send({
+            status: "ERR_REQUEST",
+            message: e,
+          });
+        })
+    })
+    .catch((err) => {
+      return res.status(400).send({
+        status: "ERR_SERVER",
+        message: err,
+
+      });
+    })
+}
+
+/**
+|--------------------------------------------------
+| UPDATE ORDER METHOD
+|--------------------------------------------------
+*/
 
 const UpdateOrder = async (req, res) => {
   const { id } = req.params;
@@ -189,6 +214,12 @@ const UpdateOrder = async (req, res) => {
     });
   }
 };
+
+/**
+|--------------------------------------------------
+| DELETE ALL ORDER METHOD
+|--------------------------------------------------
+*/
 
 const DeleteAllOrders = async (req, res) => {
   await Order.deleteMany({})
