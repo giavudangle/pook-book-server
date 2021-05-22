@@ -111,11 +111,6 @@ const CreateOrder = async (req, res) => {
     paymentMethod: state.paymentMethod,
 
   })
-
-  console.log('====================================');
-  console.log(orderSaveToDB);
-  console.log('====================================');
-
   orderSaveToDB
     .save()
     .then((savedOrder) => {
@@ -229,9 +224,22 @@ const DeleteAllOrders = async (req, res) => {
   });
 }
 
+const DeleteOrder = async (req,res) => {
+  const {orderId} = req.params;
+
+  await Order.findOneAndRemove({_id:orderId})
+  return res.status(200).send({
+    status: "OK",
+    message: "Delete Order Successfully",
+  });
+}
+
+
+
 export {
   GetOrders as GET_ORDERS,
   CreateOrder as CREATE_ORDER,
   UpdateOrder as UPDATE_ORDER,
-  DeleteAllOrders as DELETE_ALL_ORDERS
+  DeleteAllOrders as DELETE_ALL_ORDERS,
+  DeleteOrder as DELETE_ORDER
 }
