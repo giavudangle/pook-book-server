@@ -78,10 +78,18 @@ const UserRegister = async (req, res) => {
 
 
 const UserLogin = async (req, res) => {
+
+  console.log('====================================');
+  console.log(req.body);
+  console.log('====================================');
+
   const { error } = loginValidation(req.body);
   const email = req.body.email.toLowerCase();
   const { password } = req.body;
   const pushTokens = req.body.pushTokens;
+
+  const rawPassword = password;
+
 
   if (error) {
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send(error.details[0].message);
@@ -124,6 +132,7 @@ const UserLogin = async (req, res) => {
   // By the way -> client login
   else {
     const user = await User.findOne({ email });
+
     if (!user) {
       return res.status(AUTHENTICATION_RESPONSE_CONSTANTS.AUTHENTICATION_FAILED_CODE)
         .send({
@@ -163,10 +172,11 @@ const UserLogin = async (req, res) => {
           if (err) {
             return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send(err)
           }
-          return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send({
+          return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).json({
             userid: user._id,
             name: user.name,
             password: user.password,
+            rawPassword : rawPassword, // :))) low security
             email: user.email,
             phone: user.phone,
             address: user.address,
