@@ -27,9 +27,10 @@ import fs from 'fs'
  */
 
 // Get IP create deep-linking (for push notification Expo)
-const networkInterfaces = os.networkInterfaces();
-const ip = networkInterfaces.lo0[0].address || '0.0.0.0'
+// const networkInterfaces = os.networkInterfaces();
+// const ip = networkInterfaces.lo0[0].address || '0.0.0.0'
 
+const ip = '127.0.0.1'
 
 /**
  * Router 
@@ -113,7 +114,7 @@ app.get("/expo", (req, res) => {
   const token = req.query.token;
   console.log(id, token);
   res.writeHead(301, {
-    Location: `exp://${ip}:19000/--/ResetPw?userid=${id}&token=${token}`,
+    Location: `exp://${ip}:19000/--/ResetPassword?userid=${id}&token=${token}`,
   });
   res.end();
 });

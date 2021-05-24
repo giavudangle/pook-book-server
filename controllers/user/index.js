@@ -243,15 +243,17 @@ const UserResetPassword = async (req, res) => {
   let user;
   try {
     user = await User.findOne({ email });
+    if(!user){
+      return res.status(404).send({ err: 'Email is not exist' });
+    }
   } catch (err) {
     res.status(404).send({ err: 'Email is not exist' });
   }
-  console.log('====================================');
-  console.log(user);
-  console.log('====================================');
+ 
   const token = usePasswordHashToMakeToken(user);
   const url = getPasswordResetURL(user, token);
   const emailTemplate = resetPasswordTemplate(user, url);
+  
   const sendEmail = () => {
     transporter.sendMail(emailTemplate, (err, info) => {
       if (err) {
@@ -270,15 +272,11 @@ const UserResetPassword = async (req, res) => {
 const UserReceiveNewPassword = async (req, res) => {
   const { userId, token } = req.params;
   const { password } = req.body;
-
-  console.log('====================================');
-  console.log(req);
-  console.log('====================================');
-
   let data = {
     title: 'Security',
     body: `Reset Password Successfully.`,
   };
+
   // highlight-start
   const id = userId;
   const user = await User.findById(id).exec()
