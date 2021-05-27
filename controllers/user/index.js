@@ -192,9 +192,6 @@ const UserLogin = async (req, res) => {
 // Low security
 const UpdatePassword = async (req,res) => {
   const {id} = req.params;
-  console.log('====================================');
-  console.log(req.params);
-  console.log('====================================');
   const {newPassword} = req.body;
   const salt = bcrypt.genSaltSync(10);
   const hashedPassword = bcrypt.hashSync(newPassword, salt);
@@ -203,7 +200,6 @@ const UpdatePassword = async (req,res) => {
     rawPassword: newPassword
   })
   .then((result) => {
-    console.log(result);
     return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send(result);
   })
   .catch((err) => {
@@ -216,7 +212,6 @@ const UserEdit = async (req, res) => {
   const { id } = req.params;
   User.findOneAndUpdate({ _id: id }, req.body)
     .then((result) => {
-      console.log(result);
       return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send(result);
     })
     .catch((err) => {
@@ -313,9 +308,6 @@ const UserReceiveNewPassword = async (req, res) => {
         { password: hashedPassword },
         { $set: { "pushTokens": token } }
       );
-      console.log('====================================');
-      console.log(updateUser);
-      console.log('====================================');
       pushNotification(updateUser.pushTokens, data, ''),
         res.status(202).send('Password is changed');
     } catch (err) {
