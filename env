@@ -1,0 +1,16 @@
+DB_CONNECTION_LOCAL =  mongodb://localhost:27017/book-db
+DB_C0NNECTION_PRODUCTION = mongodb+srv://codingwithvudang:codingwithvudang@cluster0.w9pom.mongodb.net/book-db?retryWrites=true&w=majority
+HOST_NAME = 127.0.0.1
+EXPO_PORT = 19000
+VERSION = v1
+PORT = 8080
+SECRET_TOKEN = VUDANG_SECRET_TOKEN
+DEFAULT_ADMINNAME = admin@codingwithvudang.com
+DEFAULT_PASSWORD = codingwithvudang
+EMAIL_LOGIN = codingwithvudang@gmail.com
+EMAIL_PASSWORD = Giavu2202
+STRIPE_SECRET_TOKEN = sk_test_51IVWZTBKJhKXYzYCOPvgPcpsnuQUTBfNUYpJiGhnO3OhJVylGGdafi8j0gHkwTQBv6usQL0QXSom2y6a4BaOK8On00RBLOG1Kb
+CLOUD_NAME = codingwithvudang
+CLOUD_KEY = 161529116322531
+CLOUD_SECRET_KEY = nhKWMHpYlvRaGv0-PVlcyw6YxUw
+
