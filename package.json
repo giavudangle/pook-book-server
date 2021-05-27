@@ -6,7 +6,9 @@
   "scripts": {
     "start": "babel-node app.js",
     "dev": "nodemon --exec babel-node app.js",
-    "tunnel": "ngrok http 8080"
+    "tunnel": "ngrok http 8080",
+    "mapping": "ngrok http 19000",
+    "map-host": "ngrok http 80"
   },
   "keywords": [],
   "author": "vudang",

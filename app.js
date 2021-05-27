@@ -27,10 +27,8 @@ import fs from 'fs'
  */
 
 // Get IP create deep-linking (for push notification Expo)
-// const networkInterfaces = os.networkInterfaces();
-// const ip = networkInterfaces.lo0[0].address || '0.0.0.0'
-
-const ip = '127.0.0.1'
+const networkInterfaces = os.networkInterfaces();
+const ip = networkInterfaces.lo0[0].address?? '0.0.0.0'
 
 /**
  * Router 
@@ -105,16 +103,22 @@ app.use(cors());
 app.use(express.json());
 app.use(bodyParser.json({ limit: "10mb" }));
 app.use(bodyParser.urlencoded({ extended: false, limit: "10mb" }));
-
+app.options('*',cors());
 /**
  * Router
  */
+
+// User will request to our server ( link given from email)
+// Server will write head to expo for deeplinking
+
 app.get("/expo", (req, res) => {
   const id = req.query.userid;
   const token = req.query.token;
-  console.log(id, token);
+  const client_ip = req.query.client_ip
   res.writeHead(301, {
-    Location: `exp://${ip}:19000/--/ResetPassword?userid=${id}&token=${token}`,
+    //Location: `exp://${client_ip}:19000/--/ResetPassword?userid=${id}&token=${token}`, // Production
+    Location: `exp://${ip}:19000/--/ResetPassword?userid=${id}&token=${token}`, // Development
+
   });
   res.end();
 });
@@ -122,7 +126,7 @@ app.get("/expo", (req, res) => {
 
 
 app.get("/",(req,res)=> {
-  res.send("<img width='100%' height='100%' src='https://scontent.fsgn2-1.fna.fbcdn.net/v/t1.6435-9/151284066_207254161142817_5812038792384707893_n.png?_nc_cat=105&ccb=1-3&_nc_sid=09cbfe&_nc_ohc=ULYjP6cA8W0AX9SamJ-&_nc_ht=scontent.fsgn2-1.fna&oh=95c1fd975387814ade2d7f04fa0ead82&oe=609E2BB1'></img>")
+  res.send("<img width='100%' height='100%' src='https://res.cloudinary.com/codingwithvudang/image/upload/v1620178049/151284066_207254161142817_5812038792384707893_n_ztp9r6.png'></img>")
 })
 
 app.use(`/api/notification`, PUSH_NOTIFICATION);

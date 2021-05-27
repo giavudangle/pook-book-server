@@ -78,11 +78,6 @@ const UserRegister = async (req, res) => {
 
 
 const UserLogin = async (req, res) => {
-
-  console.log('====================================');
-  console.log(req.body);
-  console.log('====================================');
-
   const { error } = loginValidation(req.body);
   const email = req.body.email.toLowerCase();
   const { password } = req.body;
@@ -183,7 +178,7 @@ const UserLogin = async (req, res) => {
             profilePicture: user.profilePicture,
             token: token,
             loginAt: Date.now(),
-            expireTime: Date.now() + 86400000 * 7 // 7 days
+            expireTime: Date.now() + 60*60*24 * 7 // 7 days - 1h = 60 * 60 * 24
           })
         }
       )
@@ -194,11 +189,34 @@ const UserLogin = async (req, res) => {
   }
 }
 
+// Low security
+const UpdatePassword = async (req,res) => {
+  const {id} = req.params;
+  console.log('====================================');
+  console.log(req.params);
+  console.log('====================================');
+  const {newPassword} = req.body;
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync(newPassword, salt);
+  User.findOneAndUpdate({_id:id},{
+    password: hashedPassword,
+    rawPassword: newPassword
+  })
+  .then((result) => {
+    console.log(result);
+    return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send(result);
+  })
+  .catch((err) => {
+    res.status(SERVER_RESPONSE_CONSTANTS.SERVER_ERROR_CODE).send(err);
+  });
+}
+
 
 const UserEdit = async (req, res) => {
   const { id } = req.params;
   User.findOneAndUpdate({ _id: id }, req.body)
     .then((result) => {
+      console.log(result);
       return res.status(SERVER_RESPONSE_CONSTANTS.SERVER_SUCCESS_CODE).send(result);
     })
     .catch((err) => {
@@ -209,9 +227,6 @@ const UserEdit = async (req, res) => {
 const UserUploadProfilePhoto = async (req, res) => {
   const { id } = req.params;
 
-  console.log('====================================');
-  console.log(req.file);
-  console.log('====================================');
 
   if (!req.body || !req.file) {
     return res.status(CLIENT_RESPONSE_CONSTANTS.CLIENT_ERROR_CODE).send({
@@ -236,6 +251,7 @@ const UserUploadProfilePhoto = async (req, res) => {
 }
 
 const UserResetPassword = async (req, res) => {
+  const clientIp = req.body.client_ip
   const email = req.body.email.toLowerCase();
   if (!email) {
     return res.status(400).send({ err: 'Email is wrong' });
@@ -251,7 +267,7 @@ const UserResetPassword = async (req, res) => {
   }
  
   const token = usePasswordHashToMakeToken(user);
-  const url = getPasswordResetURL(user, token);
+  const url = getPasswordResetURL(user, token,clientIp);
   const emailTemplate = resetPasswordTemplate(user, url);
   
   const sendEmail = () => {
@@ -317,5 +333,6 @@ export {
   UserEdit as USER_EDIT,
   UserUploadProfilePhoto as USER_UPLOAD_PHOTO,
   UserResetPassword as USER_RESET_PASSWORD,
-  UserReceiveNewPassword as USER_RECEIVE_NEW_PASSWORD
+  UserReceiveNewPassword as USER_RECEIVE_NEW_PASSWORD,
+  UpdatePassword as USER_UPDATE_PASSWORD
 }

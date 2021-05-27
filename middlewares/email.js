@@ -2,6 +2,7 @@ require('dotenv').config();
 import nodemailer from 'nodemailer'
 
 const host = process.env.HOST_NAME
+const export_port = process.env.EXPO_PORT
 
 const transporter = nodemailer.createTransport({
   host:"smtp.gmail.com",
@@ -28,8 +29,13 @@ const transporter = nodemailer.createTransport({
 // })
 
 
-const getPasswordResetURL = (user, token) =>
-  `http://${host}:8080/expo?userid=${user._id}&token=${token}`;
+const MOCK_SERVER = 'http://52082bfd1cf8.ngrok.io'
+
+// const getPasswordResetURL = (user, token) =>
+//   `http://${host}:8080/expo?userid=${user._id}&token=${token}`;
+
+const getPasswordResetURL = (user, token,clientIp) =>
+  `${MOCK_SERVER}/expo?userid=${user._id}&token=${token}&client_ip=${clientIp}`;
 
 const resetPasswordTemplate = (user, url) => {
   const from = process.env.EMAIL_LOGIN;
