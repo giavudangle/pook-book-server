@@ -30,13 +30,13 @@ const transporter = nodemailer.createTransport({
 
 
 //development
-const getPasswordResetURL = (user, token) =>
-  `http://${host}:8080/expo?userid=${user._id}&token=${token}`;
+// const getPasswordResetURL = (user, token) =>
+//   `http://${host}:8080/expo?userid=${user._id}&token=${token}`;
 
 // production
-//const MOCK_SERVER = 'http://52082bfd1cf8.ngrok.io'
-// const getPasswordResetURL = (user, token,clientIp) =>
-//   `${MOCK_SERVER}/expo?userid=${user._id}&token=${token}&client_ip=${clientIp}`; 
+const MOCK_SERVER = 'http://be5ccfb4ede0.ngrok.io'
+const getPasswordResetURL = (user, token,clientIp) =>
+  `${MOCK_SERVER}/expo?userid=${user._id}&token=${token}&client_ip=${clientIp}`; 
 
 const resetPasswordTemplate = (user, url) => {
   const from = process.env.EMAIL_LOGIN;

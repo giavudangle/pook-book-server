@@ -117,7 +117,8 @@ app.get("/expo", (req, res) => {
   const client_ip = req.query.client_ip
   res.writeHead(301, {
     //Location: `exp://${client_ip}:19000/--/ResetPassword?userid=${id}&token=${token}`, // Production
-    Location: `exp://${ip}:19000/--/ResetPassword?userid=${id}&token=${token}`, // Development
+    // Location: `exp://${ip}:19000/--/ResetPassword?userid=${id}&token=${token}`, // Development
+    Location: `exp://192.168.1.8:19000/--/ResetPassword?userid=${id}&token=${token}`, // Testing on real device (EXPO powered same as expo running bridge id)
 
   });
   res.end();
