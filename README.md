@@ -40,7 +40,7 @@
 ## 🚀 ERD - System Analysis - Database Design 🚀
 
 ### **ERD**
-<img src="https://res.cloudinary.com/codingwithvudang/image/upload/v1619344612/image_jg9ghn.png" />
+<img src="https://res.cloudinary.com/chemthan2202/image/upload/v1622377687/erd_lzayzx.png" />
 
 ### 🚀 System Analysis and Database Design 🚀 
 
