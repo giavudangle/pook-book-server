@@ -15,27 +15,7 @@
 ## 🚀 Contributors
 - Vudang
 
-## 🚀 Server Features
-- Login, Register, Forgot Password, ResetPassword with JWT Flow. 
-- CRUD Products, Users, Carts, Whislist, Order...
-- Fetch Products, Carts, Orders...
-- Products url query (http://codingwithvudang-bookserver.herokuapp.com/api/v1/product?limit=2&page=1)
-- Send email to user.
-- Push notification to user's devices.
-- Payment via Stripe
-- Upload and resize photo 
 
-
-## Technical details
-- Nodejs, Express.
-- Mongodb, Mongoose.
-- Nodemailer.
-- Multer, Sharp.
-- Hapi/joi validation.
-- Expo notification.
-- Stripe Payment.
-  
-  
 
 ## 🚀 ERD - System Analysis - Database Design 🚀
 
@@ -122,6 +102,28 @@
 - Contact
   - Users can intertract with Pook Book via Phone Call,Instagram,Facebook Messenger.
   - Users can follow PookBook via Facebook, Youtube, Skype.
+
+## 🚀 Server Features
+- Login, Register, Forgot Password, ResetPassword with JWT Flow. 
+- CRUD Products, Users, Carts, Whislist, Order...
+- Fetch Products, Carts, Orders...
+- Products url query (http://codingwithvudang-bookserver.herokuapp.com/api/v1/product?limit=2&page=1)
+- Send email to user.
+- Push notification to user's devices.
+- Payment via Stripe
+- Upload and resize photo 
+
+
+## Technical details
+- Nodejs, Express.
+- Mongodb, Mongoose.
+- Nodemailer.
+- Multer, Sharp.
+- Hapi/joi validation.
+- Expo notification.
+- Stripe Payment.
+  
+  
 
 ## 🚀 Get Started
 
